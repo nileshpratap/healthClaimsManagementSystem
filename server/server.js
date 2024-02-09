@@ -3,8 +3,11 @@ import userRoutes from "./routes/users.js";
 import claimsRoutes from "./routes/claims.js";
 import policiesRoutes from "./routes/policies.js";
 import cors from "cors";
+import connectDBs from "./dbConnections/dbconnects.js";
 
 const app = express();
+// connect databases
+connectDBs();
 
 // middlewares
 app.use(cors());
@@ -14,4 +17,7 @@ app.use("/policies", policiesRoutes);
 
 app.get("/", (req, res) => res.send("Hey, this is a CMS response!"));
 
-app.listen(5000, () => console.log("server listening on port 5000!"));
+const serverPort = process.env.SERVER_PORT || 6001;
+app.listen(serverPort, () =>
+  console.log(`server listening on port ${serverPort}`)
+);
