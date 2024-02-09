@@ -27,7 +27,7 @@ export const createPolicybyAdmin = async (req, res) => {
 export const getUserPolicies = async (req, res) => {
   try {
     const userType = req.query.type;
-    if (userType === "user") {
+    if (userType === "customer") {
       //   get user's policies from postgresql and return
       res.status(200).json({
         msg: "Policies of a user",
@@ -47,7 +47,7 @@ export const getUserPolicies = async (req, res) => {
 export const getUserPolicybyId = async (req, res) => {
   try {
     const userType = req.query.type;
-    if (userType === "user") {
+    if (userType === "customer") {
       //   get user's policy from postgresql and return
       res.status(200).json({
         msg: "Policy of a user",
@@ -77,7 +77,7 @@ export const getPoliciesAdmin_HE = async (req, res) => {
       });
     } else if (userType === "HEmp") {
       res.status(200).json({
-        msg: "Policies related to  HEmp",
+        msg: "Policies related to HEmp",
         "Type of user": userType,
       });
     } else {

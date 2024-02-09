@@ -18,11 +18,11 @@ router.post("/create/", createPolicybyAdmin);
 router.get("/showAllforUser/:uid", getUserPolicies);
 router.get("/showforUser/:uid/:pid", getUserPolicybyId);
 // by admin
-router.get("/showAllforAdmin_HE/:aid", getPoliciesAdmin_HE);
+router.get("/showAllforAdmin_HE/:id", getPoliciesAdmin_HE);
 router.get("/showforAdmin_HE/:id/:pid", getPolicyAdmin_HE);
 
 // update
-router.put("/update/:aid/:pid", updatePolicybyAdmin);
+router.patch("/update/:aid/:pid", updatePolicybyAdmin);
 
 // delete
 router.delete("/delete/:aid/:pid", deletePolicybyAdmin);

@@ -25,10 +25,10 @@ router.get("/show/:id/:cid", showClaim);
 
 // update routes
 // by user/admin/HEmp
-router.put("/update/:id/:cid", updateClaim);
+router.patch("/update/:id/:cid", updateClaim);
 
 // delete routes
 // by user
-router.delete("delete/:uid/:pid/:cid", deleteClaim);
+router.delete("/delete/:uid/:pid/:cid", deleteClaim);
 
 export default router;
