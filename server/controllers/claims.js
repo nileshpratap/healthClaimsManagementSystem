@@ -1,60 +1,19 @@
-// controllers for users
-import { usersData } from "../data/users.js";
+// controllers for claims
 
-// controllers for customers
 // create
-export const registerCustomer = async (req, res) => {
-  // use mongodb
+// by user or HEmp
+export const createClaim = async (req, res) => {
   try {
+    // create a claim in postgresql
     const userType = req.query.type;
     if (userType === "customer") {
       res.status(200).json({
-        msg: "welcome customer",
-        "Type of user": userType,
-      });
-    } else {
-      res.status(400).json({
-        msg: "customer type invalid",
-        "Type of user": userType,
-      });
-    }
-  } catch (err) {
-    res.status(404).json({ message: err.message });
-  }
-};
-export const registerAdmin_HEmp = async (req, res) => {
-  // use postgresql
-  try {
-    const userType = req.query.type;
-    if (userType === "admin") {
-      res.status(200).json({
-        msg: "welcome Admin",
+        msg: "claim created by customer",
         "Type of user": userType,
       });
     } else if (userType === "HEmp") {
       res.status(200).json({
-        msg: "welcome HEmp",
-        "Type of user": userType,
-      });
-    } else {
-      res.status(400).json({
-        msg: "customer type invalid",
-        "Type of user": userType,
-      });
-    }
-  } catch (err) {
-    res.status(404).json({ message: err.message });
-  }
-};
-
-// read
-export const loginCustomer = async (req, res) => {
-  // use mongoDB
-  const userType = req.query.type;
-  try {
-    if (userType === "customer") {
-      res.status(200).json({
-        msg: "logged you in customer",
+        msg: "claim created by HEmp",
         "Type of user": userType,
       });
     } else {
@@ -68,18 +27,87 @@ export const loginCustomer = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
+// read
+// show all claims related to x
+export const showClaims = async (req, res) => {
   // use postgresql
   const userType = req.query.type;
   try {
-    if (userType === "admin") {
+    if (userType === "customer") {
       res.status(200).json({
-        msg: "logged you in admin",
+        msg: "all claims related to customer",
+        "Type of user": userType,
+      });
+    } else if (userType === "admin") {
+      res.status(200).json({
+        msg: "all claims related to admin",
         "Type of user": userType,
       });
     } else if (userType === "HEmp") {
       res.status(200).json({
-        msg: "logged you in HEmp",
+        msg: "lall claims related to HEmp",
+        "Type of user": userType,
+      });
+    } else {
+      res.status(400).json({
+        msg: "customer type invalid",
+        "Type of user": userType,
+      });
+    }
+  } catch (error) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
+// show all claims related to x's y policy
+export const showClaimsofPolicy = async (req, res) => {
+  // use postgresql
+  const userType = req.query.type;
+  try {
+    if (userType === "customer") {
+      res.status(200).json({
+        msg: "all claims of the policy to the customer",
+        "Type of user": userType,
+      });
+    } else if (userType === "admin") {
+      res.status(200).json({
+        msg: "all claims of the policy to the admin",
+        "Type of user": userType,
+      });
+    } else if (userType === "HEmp") {
+      res.status(200).json({
+        msg: "all claims of the policy to the HEmp",
+        "Type of user": userType,
+      });
+    } else {
+      res.status(400).json({
+        msg: "customer type invalid",
+        "Type of user": userType,
+      });
+    }
+  } catch (error) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
+// show claim y related to x
+export const showClaim = async (req, res) => {
+  // use postgresql
+  const userType = req.query.type;
+  try {
+    if (userType === "customer") {
+      res.status(200).json({
+        msg: "showing claim related to the customer",
+        "Type of user": userType,
+      });
+    } else if (userType === "admin") {
+      res.status(200).json({
+        msg: "showing claim related to the admin",
+        "Type of user": userType,
+      });
+    } else if (userType === "HEmp") {
+      res.status(200).json({
+        msg: "showing claim related to the HEmp",
         "Type of user": userType,
       });
     } else {
@@ -94,60 +122,24 @@ export const login = async (req, res) => {
 };
 
 // update
-// customer details update by customer
-export const updateCustomerDetails = async (req, res) => {
-  // use mongoDB
-  const userType = req.query.type;
+// by user/admin/HEmp
+export const updateClaim = async (req, res) => {
+  // use postgresql and mongoDB
   try {
+    const userType = req.query.type;
     if (userType === "customer") {
       res.status(200).json({
-        msg: "updated customer profile details",
+        msg: "Claim updated by customer",
         "Type of user": userType,
       });
-    } else {
-      res.status(400).json({
-        msg: "customer type invalid",
-        "Type of user": userType,
-      });
-    }
-  } catch (error) {
-    res.status(404).json({ message: err.message });
-  }
-};
-// customer details update by admin
-export const updateCustomerDetailsbyAdmin = async (req, res) => {
-  // use mongoDB
-  const userType = req.query.type;
-  try {
-    if (userType === "admin") {
+    } else if (userType === "admin") {
       res.status(200).json({
-        msg: "updated customer profile details by admin",
-        "Type of user": userType,
-      });
-    } else {
-      res.status(400).json({
-        msg: "customer type invalid",
-        "Type of user": userType,
-      });
-    }
-  } catch (error) {
-    res.status(404).json({ message: err.message });
-  }
-};
-
-// update admin/HEmp details by admin/HEmp
-export const updateAdmin_HEmp_Details = async (req, res) => {
-  // use postgresql
-  const userType = req.query.type;
-  try {
-    if (userType === "admin") {
-      res.status(200).json({
-        msg: "updated admin details",
+        msg: "Claim updated by admin",
         "Type of user": userType,
       });
     } else if (userType === "HEmp") {
       res.status(200).json({
-        msg: "updated HEmp details",
+        msg: "Claim updated by HEmp",
         "Type of user": userType,
       });
     } else {
@@ -156,10 +148,30 @@ export const updateAdmin_HEmp_Details = async (req, res) => {
         "Type of user": userType,
       });
     }
-  } catch (error) {
+  } catch (err) {
     res.status(404).json({ message: err.message });
   }
 };
 
 // delete
-// no delete routes here
+// delete a claim by customer
+export const deleteClaim = async (req, res) => {
+  try {
+    // delete claim from postgresql
+    const userType = req.query.type;
+    if (userType === "customer") {
+      // policy delete by admin
+      res.status(200).json({
+        msg: "Claim Deleted",
+        "Type of user": userType,
+      });
+    } else {
+      res.status(400).json({
+        msg: "customer type invalid",
+        "Type of user": userType,
+      });
+    }
+  } catch (error) {
+    res.status(404).json({ message: err.message });
+  }
+};
