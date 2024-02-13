@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// generator is essentilly where your code is generated into.
+// consists bunch of code in prisma format
+// so we are saying take all this prisma code and convert it using the prisma-client-js formatter which is default generator that we care about
+// most of the project use this generator
+generator client {
+  provider = "prisma-client-js"
+}
+
+// provider is where our data is coming from
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
+
+// in other files, import prisma first then use its functions to manipulate the db
+// import {PrismaClient} from '@prisma/client';
+// const prisma = new PrismaClient()
+// prisma.customers.findFirst
+
+// prisma commands:
+// npx prisma generate
+// npx prisma migrate dev --name init

@@ -1,4 +1,4 @@
-import { client } from "../dbConnections/dbconnects.js";
+// import { client } from "../dbConnections/dbconnects.js";
 
 // controllers for users
 import {
@@ -11,6 +11,7 @@ import {
 // controllers for customers
 
 export const registerCustomer = async (req, res) => {
+  /*
   const userType = req.query.type;
   const requser = req.body;
   const { uid, cname, email, password, healthCondition, dob } = req.body;
@@ -98,6 +99,7 @@ export const registerCustomer = async (req, res) => {
   } catch (err) {
     return res.status(404).json({ message: err.message });
   }
+  */
 };
 export const registerAdmin_HEmp = async (req, res) => {
   // use postgresql

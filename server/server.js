@@ -5,6 +5,16 @@ import policiesRoutes from "./routes/policies.js";
 import cors from "cors";
 import connectDBs from "./dbConnections/dbconnects.js";
 
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+async function trial() {
+  const user = await prisma.user.create({
+    data: { name: "Kyle", email: "hi@gmail.com" },
+  });
+  console.log(user);
+}
+trial();
+
 const app = express();
 // connect databases
 connectDBs();
@@ -18,7 +28,7 @@ app.use("/policies", policiesRoutes);
 
 app.get("/", (req, res) => res.send("Hey, this is a CMS response!"));
 
-const serverPort = process.env.SERVER_PORT || 5000;
+const serverPort = process.env.SERVER_PORT || 6000;
 app.listen(serverPort, () =>
   console.log(`server listening on port ${serverPort}`)
 );
