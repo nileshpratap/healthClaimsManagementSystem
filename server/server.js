@@ -3,11 +3,11 @@ import userRoutes from "./routes/users.js";
 import claimsRoutes from "./routes/claims.js";
 import policiesRoutes from "./routes/policies.js";
 import cors from "cors";
-// import connectDBs from "./dbConnections/dbconnects.js";
+import connectDBs from "./dbConnections/dbconnects.js";
 
 const app = express();
 // connect databases
-// connectDBs();
+connectDBs();
 
 // middlewares
 app.use(express.json());

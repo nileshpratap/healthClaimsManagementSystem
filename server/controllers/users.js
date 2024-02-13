@@ -1,101 +1,102 @@
+import { client } from "../dbConnections/dbconnects.js";
+
 // controllers for users
-import { db } from "../data/users.js";
 import {
   isEmailValid,
-  containsOnlyDigits,
+  isid,
   containsOnlyAlphabets,
   isgoodpassword,
+  isAdult,
 } from "../validations/validations.js";
 // controllers for customers
 
 export const registerCustomer = async (req, res) => {
-  try {
-    const userType = req.query.type;
-    const { uid, fname, email, password, dob } = req.body;
+  const userType = req.query.type;
+  const requser = req.body;
+  const { uid, cname, email, password, healthCondition, dob } = req.body;
 
-    if (userType === "customer") {
-      const requser = req.body;
-      if (!uid || !fname || !email || !password || !dob) {
-        return res.status(400).json({ message: "All fields are required." });
-      }
+  if (userType === "customer") {
+    const requser = req.body;
+    if (!uid || !cname || !email || !password || !healthCondition || !dob) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+    //validating all fields
+    // uid
+    // length should be 16 and only digits
 
-      //validating all fields
-      // email
-      if (isEmailValid(email) === false) {
-        return res.status(409).json({
-          message: "Please enter a valid email",
-        });
-      }
+    const idresp = isid(res, uid);
+    if (idresp !== true) return idresp;
 
-      // uid
-      // length should be 16 and only digits
-      if (uid.length !== 16 || !containsOnlyDigits(uid)) {
-        return res.status(409).json({
-          message: "Please enter a valid UID",
-        });
-      }
-
-      // fname
-      if (!containsOnlyAlphabets(fname)) {
-        return res.status(409).json({
-          message: "Your name should only consist alphabets",
-        });
-      }
-
-      // password
-      if (!isgoodpassword(password)) {
-        return res.status(409).json({
-          message: "Password needs to be 6 characters at minimun",
-        });
-      }
-
-      // dob
-      const dateObject = new Date(dob);
-      if (isNaN(dateObject.getTime())) {
-        return res.status(409).json({
-          message: "Invalid date string",
-        });
-      } else {
-        const timeDifference = Date.now() - dateObject.getTime();
-        // Calculate the number of milliseconds in 18 years
-        const eighteenYearsInMillis = 18 * 365 * 24 * 60 * 60 * 1000;
-        if (timeDifference <= 0) {
-          return res.status(409).json({
-            message: "Date can't be in the future",
-          });
-        }
-        if (timeDifference < eighteenYearsInMillis) {
-          return res.status(409).json({
-            message: "Your age is less than 18, You can't register",
-          });
-        }
-      }
-
-      //checking if user is unique
-      // Check for existing user with the same username
-      const existingUser = db.users.find((user) => user.uid === uid);
-      if (existingUser) {
-        return res.status(409).json({
-          message:
-            "User already exists, please login if the uid entered is yours",
-        });
-      } else {
-        // adding the user to our db
-        db.users.push(requser);
-        return res.status(200).json({
-          msg: "welcome customer",
-          "Type of user": userType,
-          "details received": requser,
-        });
-      }
-    } else {
-      return res.status(400).json({
-        msg: "customer type invalid",
-        "Type of user": userType,
+    // cname
+    if (cname.length > 60 || !containsOnlyAlphabets(cname)) {
+      return res.status(409).json({
+        message: "Your name should only consist alphabets and length <= 60",
       });
     }
+    // email
+    if (isEmailValid(email) === false) {
+      return res.status(409).json({
+        message: "Please enter a valid email",
+      });
+    }
+
+    // password
+    const isgoodpasswordres = isgoodpassword(res, password);
+    if (isgoodpasswordres !== true) return isgoodpasswordres;
+
+    // dob
+    const adultres = isAdult(res, dob);
+    if (adultres !== true) return adultres;
+  } else {
+    return res.status(400).json({
+      msg: "customer type invalid",
+      "Type of user": userType,
+    });
+  }
+  try {
+    //checking if user is unique
+    // Check for existing user with the same uid
+    console.log("making select query");
+    client.query(
+      "SELECT * FROM Customers where UID = $1;",
+      [uid],
+      (dberr, dbres) => {
+        if (!dberr) {
+          if (dbres.rows.length !== 0) {
+            return res.status(409).json({
+              msg: "customer already exists, please login if this is your UID",
+              "Type of user": userType,
+            });
+          } else {
+            console.log(dbres);
+          }
+        }
+      }
+    );
+
+    // pushing an entry into db
+    client.query(
+      ` INSERT INTO Customers (UID, Name, Email, Password, HealthCondition, DOB)
+    VALUES
+      ($1,$2,$3,$4,$5,$6)`,
+      [uid, cname, email, password, healthCondition, dob],
+      (dberr, dbres) => {
+        if (!dberr) {
+          return res.status(200).json({
+            msg: "registered the customer",
+            "Type of user": userType,
+            "registered user": dbres.rows[0],
+          });
+        } else {
+          return res.status(409).json({
+            msg: dberr.message,
+            "Type of user": userType,
+          });
+        }
+      }
+    );
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    return res.status(404).json({ message: err.message });
   }
 };
 export const registerAdmin_HEmp = async (req, res) => {

@@ -1,12 +1,14 @@
 CREATE TABLE Customers (
     UID CHAR(16) PRIMARY KEY,
     Name VARCHAR(60),
-	Email VARCHAR(30) UNIQUE NOT NULL,,
+	Email VARCHAR(30) UNIQUE NOT NULL,
 	Password VARCHAR(30),
     HealthCondition INTEGER CHECK (HealthCondition >= 0 AND HealthCondition <= 10),
     DOB DATE,
-    PIDs VARCHAR(16)[]
+    PIDs VARCHAR(16)[] default '{}'
 );
+
+select * from Customers where UID = '1234';
 
 CREATE TABLE Admins (
     EID CHAR(16) PRIMARY KEY,
