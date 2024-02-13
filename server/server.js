@@ -8,10 +8,8 @@ import connectDBs from "./dbConnections/dbconnects.js";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 async function trial() {
-  const user = await prisma.user.create({
-    data: { name: "Kyle", email: "hi@gmail.com" },
-  });
-  console.log(user);
+  const users = await prisma.customers.findMany();
+  console.log(users);
 }
 trial();
 

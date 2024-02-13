@@ -15,11 +15,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+model Customers {
+  UID             String    @id
+  Name            String?
+  Email           String    @unique
+  Password        String?
+  HealthCondition Int
+  DOB             DateTime?
+  PIDs            String[]  @default([])
 }
+
+// model User {
+//   id    Int     @id @default(autoincrement())
+//   email String  @unique
+//   name  String?
+// }
 
 // in other files, import prisma first then use its functions to manipulate the db
 // import {PrismaClient} from '@prisma/client';

@@ -3,7 +3,7 @@ CREATE TABLE Customers (
     Name VARCHAR(60),
 	Email VARCHAR(30) UNIQUE NOT NULL,
 	Password VARCHAR(30),
-    HealthCondition INTEGER CHECK (HealthCondition >= 0 AND HealthCondition <= 10),
+    HealthCondition INT,
     DOB DATE,
     PIDs VARCHAR(16)[] default '{}'
 );
