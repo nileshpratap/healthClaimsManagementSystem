@@ -18,9 +18,9 @@ router.post("/register", registerAdmin_HEmp);
 
 // read routes
 // login
-router.get("/loginCustomer/:uid", loginCustomer);
+router.get("/loginCustomer", loginCustomer);
 // login for admin or HE based on query parameter
-router.get("/login/:id", login);
+router.get("/login", login);
 
 // update
 // update customer profile data based on uid
