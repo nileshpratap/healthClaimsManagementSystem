@@ -1,5 +1,11 @@
 // controllers for users
 import { db } from "../data/users.js";
+import {
+  isEmailValid,
+  containsOnlyDigits,
+  containsOnlyAlphabets,
+  isgoodpassword,
+} from "../validations/validations.js";
 // controllers for customers
 
 export const registerCustomer = async (req, res) => {
@@ -15,10 +21,6 @@ export const registerCustomer = async (req, res) => {
 
       //validating all fields
       // email
-      function isEmailValid(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-      }
       if (isEmailValid(email) === false) {
         return res.status(409).json({
           message: "Please enter a valid email",
@@ -27,10 +29,6 @@ export const registerCustomer = async (req, res) => {
 
       // uid
       // length should be 16 and only digits
-      function containsOnlyDigits(str) {
-        const digitRegex = /^\d+$/;
-        return digitRegex.test(str);
-      }
       if (uid.length !== 16 || !containsOnlyDigits(uid)) {
         return res.status(409).json({
           message: "Please enter a valid UID",
@@ -38,10 +36,6 @@ export const registerCustomer = async (req, res) => {
       }
 
       // fname
-      function containsOnlyAlphabets(str) {
-        const alphabetRegex = /^[a-zA-Z]+$/;
-        return alphabetRegex.test(str);
-      }
       if (!containsOnlyAlphabets(fname)) {
         return res.status(409).json({
           message: "Your name should only consist alphabets",
@@ -49,7 +43,7 @@ export const registerCustomer = async (req, res) => {
       }
 
       // password
-      if (password.length < 6) {
+      if (!isgoodpassword(password)) {
         return res.status(409).json({
           message: "Password needs to be 6 characters at minimun",
         });
