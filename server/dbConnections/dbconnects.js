@@ -40,9 +40,9 @@ const connectPostgres = async () => {
 };
 
 const connectDBs = async () => {
-  console.log("establishing Server-DB connection");
-  // connectMongoDB();
-  connectPostgres();
+  // console.log("establishing Server-DB connection");
+  // // connectMongoDB();
+  // connectPostgres();
 };
 
 // Export the 'client' instance as a named export

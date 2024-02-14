@@ -15,10 +15,54 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+model Customers {
+  UID             String   @id @db.Char(16)
+  Name            String   @db.VarChar(60)
+  Email           String   @unique
+  Password        String   @db.VarChar(100)
+  HealthCondition Int
+  DOB             DateTime
+  PIDs            String[] @default([])
+}
+
+model Admins {
+  EID      String   @id @db.Char(16)
+  Name     String   @db.VarChar(60)
+  Email    String   @unique
+  Password String   @db.VarChar(100)
+  Policies String[] @default([])
+}
+
+model HEmps {
+  HEID     String   @id @db.Char(16)
+  HID      String   @default("1")
+  Name     String   @db.VarChar(60)
+  Email    String   @unique
+  Password String   @db.VarChar(100)
+  Policies String[] @default([])
+}
+
+model Policies {
+  PID       String   @id @db.Char(8)
+  StartDate DateTime
+  EndDate   DateTime
+  PAmount   Float
+  PBalance  Float
+  UID       String   @db.Char(16)
+  EID       String   @default("not assigned") @db.Char(16)
+  HEID      String   @default("not assigned") @db.Char(16)
+  Claims    String[] @default([])
+  Status    String   @default("Under Review")
+}
+
+model Claims {
+  CID        String @id @db.Char(16)
+  PID        String @db.Char(8)
+  CustomerID String @db.Char(16)
+  HEmpID     String @db.Char(16)
+  AdminID    String @db.Char(16)
+  Status     String @default("Under Review")
+  reqAmt     Float
 }
 
 // in other files, import prisma first then use its functions to manipulate the db
