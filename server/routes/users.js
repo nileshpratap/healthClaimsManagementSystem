@@ -2,12 +2,12 @@ import express from "express";
 import {
   registerCustomer,
   registerAdmin_HEmp,
-  loginCustomer,
   login,
   updateCustomerDetails,
   updateAdmin_HEmp_Details,
   updateCustomerDetailsbyAdmin,
 } from "../controllers/users.js";
+import { authenticate } from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -18,8 +18,6 @@ router.post("/register", registerAdmin_HEmp);
 
 // read routes
 // login
-router.get("/loginCustomer", loginCustomer);
-// login for admin or HE based on query parameter
 router.get("/login", login);
 
 // update

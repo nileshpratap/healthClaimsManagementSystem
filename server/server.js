@@ -3,19 +3,14 @@ import userRoutes from "./routes/users.js";
 import claimsRoutes from "./routes/claims.js";
 import policiesRoutes from "./routes/policies.js";
 import cors from "cors";
-import connectDBs from "./dbConnections/dbconnects.js";
-
+// import connectDBs from "./dbConnections/dbconnects.js";
 import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
-async function trial() {
-  const users = await prisma.customers.findMany();
-  console.log(users);
-}
-trial();
+
+export const prisma = new PrismaClient();
 
 const app = express();
 // connect databases
-connectDBs();
+// connectDBs();
 
 // middlewares
 app.use(express.json());
