@@ -3,8 +3,8 @@ import {
   createPolicybyUser,
   getUserPolicies,
   getUserPolicybyId,
-  getPoliciesAdmin_HE,
-  getPolicyAdmin_HE,
+  getPoliciesAdmin,
+  getPolicyAdmin,
   updatePolicybyAdmin,
   deletePolicybyAdmin,
 } from "../controllers/policies.js";
@@ -18,13 +18,13 @@ router.post("/create", createPolicybyUser);
 router.get("/showAllforUser", getUserPolicies);
 router.get("/showforUser", getUserPolicybyId);
 // by admin
-router.get("/showAllforAdmin_HE/:id", getPoliciesAdmin_HE);
-router.get("/showforAdmin_HE/:id/:pid", getPolicyAdmin_HE);
+router.get("/showAllforAdmin", getPoliciesAdmin);
+router.get("/showforAdmin", getPolicyAdmin);
 
 // update
-router.patch("/update/:aid/:pid", updatePolicybyAdmin);
+router.patch("/update", updatePolicybyAdmin);
 
 // delete
-router.delete("/delete/:aid/:pid", deletePolicybyAdmin);
+router.delete("/delete", deletePolicybyAdmin);
 
 export default router;
