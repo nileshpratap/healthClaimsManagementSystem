@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  createPolicybyAdmin,
+  createPolicybyUser,
   getUserPolicies,
   getUserPolicybyId,
   getPoliciesAdmin_HE,
@@ -11,12 +11,12 @@ import {
 const router = express.Router();
 
 // create
-router.post("/create/", createPolicybyAdmin);
+router.post("/create", createPolicybyUser);
 
 // read
 // by user
-router.get("/showAllforUser/:uid", getUserPolicies);
-router.get("/showforUser/:uid/:pid", getUserPolicybyId);
+router.get("/showAllforUser", getUserPolicies);
+router.get("/showforUser", getUserPolicybyId);
 // by admin
 router.get("/showAllforAdmin_HE/:id", getPoliciesAdmin_HE);
 router.get("/showforAdmin_HE/:id/:pid", getPolicyAdmin_HE);

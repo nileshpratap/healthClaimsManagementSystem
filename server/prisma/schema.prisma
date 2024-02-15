@@ -43,11 +43,10 @@ model HEmps {
 }
 
 model Policies {
-  PID       String   @id @db.Char(8)
+  PID       Int      @id @default(autoincrement())
   StartDate DateTime
   EndDate   DateTime
   PAmount   Float
-  PBalance  Float
   UID       String   @db.Char(16)
   EID       String   @default("not assigned") @db.Char(16)
   HEID      String   @default("not assigned") @db.Char(16)
@@ -56,7 +55,7 @@ model Policies {
 }
 
 model Claims {
-  CID        String @id @db.Char(16)
+  CID        Int    @id @default(autoincrement())
   PID        String @db.Char(8)
   CustomerID String @db.Char(16)
   HEmpID     String @db.Char(16)

@@ -22,7 +22,7 @@ router.get("/login", login);
 
 // update
 // update customer profile data based on uid
-router.patch("/updateCustomer/:uid", updateCustomerDetails);
+router.patch("/updateCustomer/", updateCustomerDetails);
 // update customer profile data based on uid by admin
 router.patch("/updateCustomerbyAdmin/:uid/:aid", updateCustomerDetailsbyAdmin);
 // update admin/HEmp profile data based on id
