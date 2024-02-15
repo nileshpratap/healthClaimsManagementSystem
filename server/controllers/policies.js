@@ -1,24 +1,92 @@
 // controllers for policies
+import { constants } from "buffer";
+import { prisma } from "../server.js";
 
 // create
 // policy creation only by admin
-export const createPolicybyAdmin = async (req, res) => {
-  try {
-    const userType = req.query.type;
-    if (userType === "admin") {
-      // take a decision to create a policy
-      res.status(200).json({
-        msg: "Policy created",
+
+export const checkUserValidity = async (dbname, id, mail, res, userType) => {
+  // finding customer in the db with details in the request
+  let foundUser;
+
+  if (dbname === "customers") {
+    foundUser = await prisma[dbname].findUnique({
+      where: { UID: id },
+    });
+  } else if (dbname === "admins") {
+    foundUser = await prisma[dbname].findUnique({
+      where: { EID: id },
+    });
+  }
+
+  if (!foundUser) {
+    return res.status(404).json({
+      msg: "Invalid user ID",
+      "Type of user": userType,
+    });
+  } else {
+    if (foundUser.Email !== mail) {
+      return res.status(404).json({
+        msg: "can't create a policy, your id and email don't match",
         "Type of user": userType,
       });
     } else {
-      res.status(400).json({
+      return { type: true, user: foundUser };
+    }
+  }
+};
+
+export const createPolicybyUser = async (req, res) => {
+  try {
+    const userType = req.query.type;
+    if (userType === "customer") {
+      // check if the customer is valid
+
+      const { UID, Email, StartDate, EndDate, PAmount } = req.body;
+
+      const UserValidity = await checkUserValidity(
+        "customers",
+        UID,
+        Email,
+        res,
+        userType
+      );
+      if (UserValidity.type !== true) {
+        return UserValidity;
+      }
+      const customer = UserValidity.user;
+      // we got the user now add a policy row
+      const createdPolicy = await prisma.policies.create({
+        data: {
+          UID,
+          StartDate,
+          EndDate,
+          PAmount,
+        },
+      });
+      const pid = createdPolicy.PID.toString();
+      // update user row by adding a policy id in the table
+      const updatedUser = await prisma.customers.update({
+        where: { UID },
+        data: {
+          PIDs: {
+            push: pid,
+          },
+        },
+      });
+      return res.status(200).json({
+        msg: "created policy for the customer in the db",
+        "Type of user": userType,
+        "updated user": updatedUser,
+      });
+    } else {
+      return res.status(400).json({
         msg: "customer type invalid",
         "Type of user": userType,
       });
     }
   } catch (error) {
-    res.status(404).json({ message: err.message });
+    return res.status(404).json({ message: error.message });
   }
 };
 
@@ -27,92 +95,166 @@ export const createPolicybyAdmin = async (req, res) => {
 export const getUserPolicies = async (req, res) => {
   try {
     const userType = req.query.type;
+    const { UID, Email } = req.body;
+
     if (userType === "customer") {
-      //   get user's policies from postgresql and return
-      res.status(200).json({
+      //  get user's policies from postgresql and return as a response
+
+      // validate the req details
+
+      // check user validity
+      const UserValidity = await checkUserValidity(
+        "customers",
+        UID,
+        Email,
+        res
+      );
+      if (UserValidity.type !== true) {
+        return UserValidity;
+      }
+      const customer = UserValidity.user;
+      // get his pids & get the details of all of his policies and return
+      let policies = await Promise.all(
+        customer.PIDs.map(async (pid) => {
+          const pDetails = await prisma.policies.findUnique({
+            where: {
+              PID: parseInt(pid),
+            },
+          });
+          console.log(pDetails);
+          return pDetails;
+        })
+      );
+      return res.status(200).json({
         msg: "Policies of a user",
         "Type of user": userType,
+        policies,
       });
     } else {
-      res.status(400).json({
+      return res.status(400).json({
         msg: "customer type invalid",
         "Type of user": userType,
       });
     }
-  } catch (error) {
-    res.status(404).json({ message: err.message });
+  } catch (err) {
+    return res.status(404).json({ message: err.message });
   }
 };
 // showing specific policy of a user to the user
 export const getUserPolicybyId = async (req, res) => {
   try {
     const userType = req.query.type;
+    const { UID, Email, PID } = req.body;
     if (userType === "customer") {
       //   get user's policy from postgresql and return
-      res.status(200).json({
+
+      // check user validity
+      const UserValidity = await checkUserValidity(
+        "customers",
+        UID,
+        Email,
+        res
+      );
+      if (UserValidity.type !== true) {
+        return UserValidity;
+      }
+      const customer = UserValidity.user;
+
+      // check if the policy belongs to user
+
+      if (customer.PIDs.indexOf(PID.toString()) === -1) {
+        return res.status(404).json({
+          msg: "this PID doesn't belong to you",
+          "Type of user": userType,
+        });
+      }
+
+      // get the details of all of his policies and return as response
+      const policy = await prisma.policies.findUnique({
+        where: {
+          PID: parseInt(PID),
+        },
+      });
+      console.log(policy);
+
+      return res.status(200).json({
         msg: "Policy of a user",
         "Type of user": userType,
+        UID: customer.UID,
+        policy,
       });
     } else {
-      res.status(400).json({
+      return res.status(400).json({
         msg: "customer type invalid",
         "Type of user": userType,
       });
     }
-  } catch (error) {
-    res.status(404).json({ message: err.message });
+  } catch (err) {
+    return res.status(404).json({ message: err.message });
   }
 };
 
 // read functions by admin
 // read all policies that admin/HE is involved in to the admin/HEmp
-export const getPoliciesAdmin_HE = async (req, res) => {
+export const getPoliciesAdmin = async (req, res) => {
   try {
     const userType = req.query.type;
+    const { EID, Email } = req.body;
     if (userType === "admin") {
       //   get all policies that admin is involved in.
-      res.status(200).json({
+      const UserValidity = await checkUserValidity(
+        "admins",
+        EID,
+        Email,
+        res,
+        userType
+      );
+      if (UserValidity.type !== true) {
+        return UserValidity;
+      }
+      const admin = UserValidity.user;
+
+      // scrape policie table to find all rows with EID = admin.EID.
+      const adminPolicies = await prisma.policies.findMany({
+        where: {
+          EID: admin.EID,
+        },
+      });
+      console.log(adminPolicies);
+
+      return res.status(200).json({
         msg: "Policies related to admin",
         "Type of user": userType,
-      });
-    } else if (userType === "HEmp") {
-      res.status(200).json({
-        msg: "Policies related to HEmp",
-        "Type of user": userType,
+        adminPolicies,
       });
     } else {
-      res.status(400).json({
+      return res.status(400).json({
         msg: "customer type invalid",
         "Type of user": userType,
       });
     }
-  } catch (error) {
-    res.status(404).json({ message: err.message });
+  } catch (err) {
+    return res.status(404).json({ message: err.message });
   }
 };
 // read specific policy that admin/HE is involved in to the admin/HEmp
-export const getPolicyAdmin_HE = async (req, res) => {
+export const getPolicyAdmin = async (req, res) => {
   try {
     const userType = req.query.type;
     if (userType === "admin") {
       //   get all policies that admin is involved in.
-      res.status(200).json({
+      return res.status(200).json({
         msg: "Policy x accessed by Admin",
         "Type of user": userType,
       });
-    } else if (userType === "HEmp") {
-      res.status(200).json({
-        msg: "Policy x accessed by HEmp",
-        "Type of user": userType,
-      });
     } else {
-      res.status(400).json({
+      return res.status(400).json({
         msg: "customer type invalid",
         "Type of user": userType,
       });
     }
   } catch (error) {
-    res.status(404).json({ message: err.message });
+    return res.status(404).json({ message: err.message });
   }
 };
 
@@ -121,20 +263,39 @@ export const getPolicyAdmin_HE = async (req, res) => {
 export const updatePolicybyAdmin = async (req, res) => {
   try {
     const userType = req.query.type;
+    const { EID, Email, PID, Status } = req.body;
     if (userType === "admin") {
-      // can he update the policy? yes, then do it.
-      res.status(200).json({
-        msg: "Policy updated",
+      //   get all policies that admin is involved in.
+      const UserValidity = await checkUserValidity(
+        "admins",
+        EID,
+        Email,
+        res,
+        userType
+      );
+      if (UserValidity.type !== true) {
+        return UserValidity;
+      }
+      const admin = UserValidity.user;
+
+      const updatedPolicy = await prisma.policies.update({
+        where: { PID },
+        data: { Status },
+      });
+
+      return res.status(200).json({
+        msg: "Policies updated by admin",
         "Type of user": userType,
+        updatedPolicy,
       });
     } else {
-      res.status(400).json({
+      return res.status(400).json({
         msg: "customer type invalid",
         "Type of user": userType,
       });
     }
   } catch (error) {
-    res.status(404).json({ message: err.message });
+    return res.status(404).json({ message: err.message });
   }
 };
 
@@ -143,19 +304,55 @@ export const updatePolicybyAdmin = async (req, res) => {
 export const deletePolicybyAdmin = async (req, res) => {
   try {
     const userType = req.query.type;
+    const { EID, Email, PID } = req.body;
     if (userType === "admin") {
-      // policy delete by admin
-      res.status(200).json({
-        msg: "Policy deleted",
+      //   get all policies that admin is involved in.
+      const UserValidity = await checkUserValidity(
+        "admins",
+        EID,
+        Email,
+        res,
+        userType
+      );
+      if (UserValidity.type !== true) {
+        return UserValidity;
+      }
+      const admin = UserValidity.user;
+
+      // delete the pid from user's pids column
+      // update user row by adding a policy id in the table
+      const policyDetails = await prisma.policies.findFirst({
+        where: { PID },
+      });
+      // console.log(policyDetails);
+      const olduser = await prisma.customers.findFirst({
+        where: { UID: policyDetails.UID },
+      });
+      const oldPolicies = olduser.PIDs;
+      // console.log(policyDetails);
+      const newPolicies = oldPolicies.filter((id) => id !== PID.toString());
+      console.log(newPolicies);
+      const updatedUser = await prisma.customers.update({
+        where: { UID: policyDetails.UID },
+        data: { PIDs: newPolicies },
+      });
+
+      const deleteResponse = await prisma.policies.delete({
+        where: { PID },
+      });
+      return res.status(200).json({
+        msg: "Policies updated by admin",
         "Type of user": userType,
+        updatedUser,
+        deleteResponse,
       });
     } else {
-      res.status(400).json({
+      return res.status(400).json({
         msg: "customer type invalid",
         "Type of user": userType,
       });
     }
-  } catch (error) {
-    res.status(404).json({ message: err.message });
+  } catch (err) {
+    return res.status(404).json({ message: err.message });
   }
 };

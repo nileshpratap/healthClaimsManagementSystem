@@ -22,6 +22,34 @@ app.use("/policies", policiesRoutes);
 app.get("/", (req, res) => res.send("Hey, this is a CMS response!"));
 
 const serverPort = process.env.SERVER_PORT || 6000;
-app.listen(serverPort, () =>
-  console.log(`server listening on port ${serverPort}`)
-);
+app.listen(serverPort, () => {
+  console.log(`server listening on port ${serverPort}`);
+});
+
+// assign every policy a admin and user based on some calculations
+// assigning these values for all the policies for now
+const updateAllPolicies = async () => {
+  // console.log("updating all policies");
+  try {
+    const allPolicies = await prisma.policies.findMany();
+
+    // Update logic here
+    const updatedPolicies = await Promise.all(
+      allPolicies.map(async (policy) => {
+        // Your update logic for each policy
+        // Example: Updating a specific column for each policy
+        return prisma.policies.update({
+          where: { PID: policy.PID },
+          data: { EID: "1234123412341234", HEID: "3234123412341234" },
+        });
+      })
+    );
+
+    // console.log("Updated policies:", updatedPolicies);
+  } catch (error) {
+    console.error("Error updating policies:", error);
+  }
+};
+
+// Run the update function at 5-minute intervals
+setInterval(updateAllPolicies, 2 * 60 * 1000); // 5 minutes in milliseconds

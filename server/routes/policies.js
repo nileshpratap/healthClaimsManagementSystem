@@ -1,30 +1,30 @@
 import express from "express";
 import {
-  createPolicybyAdmin,
+  createPolicybyUser,
   getUserPolicies,
   getUserPolicybyId,
-  getPoliciesAdmin_HE,
-  getPolicyAdmin_HE,
+  getPoliciesAdmin,
+  getPolicyAdmin,
   updatePolicybyAdmin,
   deletePolicybyAdmin,
 } from "../controllers/policies.js";
 const router = express.Router();
 
 // create
-router.post("/create/", createPolicybyAdmin);
+router.post("/create", createPolicybyUser);
 
 // read
 // by user
-router.get("/showAllforUser/:uid", getUserPolicies);
-router.get("/showforUser/:uid/:pid", getUserPolicybyId);
+router.get("/showAllforUser", getUserPolicies);
+router.get("/showforUser", getUserPolicybyId);
 // by admin
-router.get("/showAllforAdmin_HE/:id", getPoliciesAdmin_HE);
-router.get("/showforAdmin_HE/:id/:pid", getPolicyAdmin_HE);
+router.get("/showAllforAdmin", getPoliciesAdmin);
+router.get("/showforAdmin", getPolicyAdmin);
 
 // update
-router.patch("/update/:aid/:pid", updatePolicybyAdmin);
+router.patch("/update", updatePolicybyAdmin);
 
 // delete
-router.delete("/delete/:aid/:pid", deletePolicybyAdmin);
+router.delete("/delete", deletePolicybyAdmin);
 
 export default router;
