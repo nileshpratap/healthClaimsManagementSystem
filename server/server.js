@@ -20,6 +20,10 @@ app.use("/claims", claimsRoutes);
 app.use("/policies", policiesRoutes);
 
 app.get("/", (req, res) => res.send("Hey, this is a CMS response!"));
+// Define default route
+app.get("*", (req, res) => {
+  res.status(404).send("Path not found");
+});
 
 const serverPort = process.env.SERVER_PORT || 6000;
 app.listen(serverPort, () => {
@@ -52,4 +56,4 @@ const updateAllPolicies = async () => {
 };
 
 // Run the update function at 5-minute intervals
-setInterval(updateAllPolicies, 2 * 60 * 1000); // 5 minutes in milliseconds
+// setInterval(updateAllPolicies, 2 * 60 * 1000); // 5 minutes in milliseconds

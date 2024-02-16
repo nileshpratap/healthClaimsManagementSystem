@@ -5,30 +5,30 @@ import {
   showClaimsofPolicy,
   showClaim,
   updateClaim,
-  deleteClaim,
+  cancelClaim,
 } from "../controllers/claims.js";
 
 const router = express.Router();
 
 // create routes
-// by user or HEmp
-router.post("/create/:uid/:pid", createClaim);
+// by user
+router.post("/create", createClaim);
 
 // read routes
 // by user/admin/HEmp
 // show all claims related to x
-router.get("/showAll/:id/", showClaims);
+router.get("/showAll", showClaims);
 // show all claims related to x's y policy
-router.get("/showAll/:id/:pid", showClaimsofPolicy);
+router.get("/showAllforPolicy", showClaimsofPolicy);
 // show claim y related to x
-router.get("/show/:id/:cid", showClaim);
+router.get("/show", showClaim);
 
 // update routes
 // by user/admin/HEmp
-router.patch("/update/:id/:cid", updateClaim);
+router.patch("/update", updateClaim);
 
 // delete routes
 // by user
-router.delete("/delete/:uid/:pid/:cid", deleteClaim);
+router.delete("/delete", cancelClaim);
 
 export default router;

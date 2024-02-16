@@ -62,9 +62,10 @@ export const createPolicybyUser = async (req, res) => {
           StartDate,
           EndDate,
           PAmount,
+          PBalance: PAmount,
         },
       });
-      const pid = createdPolicy.PID.toString();
+      const pid = createdPolicy.PID;
       // update user row by adding a policy id in the table
       const updatedUser = await prisma.customers.update({
         where: { UID },
@@ -85,8 +86,8 @@ export const createPolicybyUser = async (req, res) => {
         "Type of user": userType,
       });
     }
-  } catch (error) {
-    return res.status(404).json({ message: error.message });
+  } catch (err) {
+    return res.status(404).json({ message: err.message });
   }
 };
 
@@ -162,7 +163,7 @@ export const getUserPolicybyId = async (req, res) => {
 
       // check if the policy belongs to user
 
-      if (customer.PIDs.indexOf(PID.toString()) === -1) {
+      if (customer.PIDs.indexOf(PID) === -1) {
         return res.status(404).json({
           msg: "this PID doesn't belong to you",
           "Type of user": userType,
@@ -175,7 +176,6 @@ export const getUserPolicybyId = async (req, res) => {
           PID: parseInt(PID),
         },
       });
-      console.log(policy);
 
       return res.status(200).json({
         msg: "Policy of a user",
@@ -324,14 +324,18 @@ export const deletePolicybyAdmin = async (req, res) => {
       const policyDetails = await prisma.policies.findFirst({
         where: { PID },
       });
+      if (!policyDetails) {
+        return res.status(404).json({
+          msg: "Policy with this PID not found, recheck your details",
+          "Type of user": userType,
+        });
+      }
       // console.log(policyDetails);
       const olduser = await prisma.customers.findFirst({
         where: { UID: policyDetails.UID },
       });
       const oldPolicies = olduser.PIDs;
-      // console.log(policyDetails);
-      const newPolicies = oldPolicies.filter((id) => id !== PID.toString());
-      console.log(newPolicies);
+      const newPolicies = oldPolicies.filter((id) => id !== PID);
       const updatedUser = await prisma.customers.update({
         where: { UID: policyDetails.UID },
         data: { PIDs: newPolicies },
@@ -341,7 +345,7 @@ export const deletePolicybyAdmin = async (req, res) => {
         where: { PID },
       });
       return res.status(200).json({
-        msg: "Policies updated by admin",
+        msg: `Policy with id ${PID} deleted by admin`,
         "Type of user": userType,
         updatedUser,
         deleteResponse,

@@ -6,6 +6,10 @@ SELECT * FROM "public"."HEmps";
 
 SELECT * FROM "public"."Policies";
 
+UPDATE "public"."Policies" SET "PBalance" = 200000;
+
+SELECT * FROM "public"."Claims";
+
 DELETE FROM "public"."Customers" WHERE "UID" = '1111111111111111';
 
 INSERT INTO "public"."Customers" ("UID", "Name", "Email", "Password", "HealthCondition", "DOB")
