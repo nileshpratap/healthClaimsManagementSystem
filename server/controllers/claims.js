@@ -382,7 +382,10 @@ export const updateClaim = async (req, res) => {
         });
       }
       claim = claim[0];
-      if (claim.Status === "Under Review" && action === "approve") {
+      if (
+        claim.Status === "Under Review" &&
+        (action === "approve" || action === "decline")
+      ) {
         // check if the policy balance is < CAmt
         const policy = await prisma.policies.findFirst({ where: { PID } });
         if (!policy) {
@@ -391,6 +394,21 @@ export const updateClaim = async (req, res) => {
             "Type of user": userType,
           });
         }
+        // decline the claim
+        if (action === "decline") {
+          const updatedClaim = await prisma.claims.update({
+            where: { CID },
+            data: {
+              Status: "declined",
+            },
+          });
+          return res.status(200).json({
+            msg: "Claim declined by admin",
+            "Type of user": userType,
+            updatedClaim,
+          });
+        }
+
         const newPBalance = policy["PBalance"] - claim.CAmt;
         if (newPBalance < 0) {
           return res.status(400).json({
@@ -411,7 +429,7 @@ export const updateClaim = async (req, res) => {
           },
         });
         return res.status(200).json({
-          msg: "Claim updated by customer",
+          msg: "Claim updated by admin",
           "Type of user": userType,
           updatedClaim,
         });
