@@ -22,24 +22,24 @@ model Customers {
   Password        String   @db.VarChar(100)
   HealthCondition Int
   DOB             DateTime
-  PIDs            String[] @default([])
+  PIDs            Int[]    @default([])
 }
 
 model Admins {
-  EID      String   @id @db.Char(16)
-  Name     String   @db.VarChar(60)
-  Email    String   @unique
-  Password String   @db.VarChar(100)
-  Policies String[] @default([])
+  EID      String @id @db.Char(16)
+  Name     String @db.VarChar(60)
+  Email    String @unique
+  Password String @db.VarChar(100)
+  Policies Int[]  @default([])
 }
 
 model HEmps {
-  HEID     String   @id @db.Char(16)
-  HID      String   @default("1")
-  Name     String   @db.VarChar(60)
-  Email    String   @unique
-  Password String   @db.VarChar(100)
-  Policies String[] @default([])
+  HEID     String @id @db.Char(16)
+  HID      String @default("1")
+  Name     String @db.VarChar(60)
+  Email    String @unique
+  Password String @db.VarChar(100)
+  Policies Int[]  @default([])
 }
 
 model Policies {
@@ -47,21 +47,22 @@ model Policies {
   StartDate DateTime
   EndDate   DateTime
   PAmount   Float
+  PBalance  Float    @default(-1)
   UID       String   @db.Char(16)
   EID       String   @default("not assigned") @db.Char(16)
   HEID      String   @default("not assigned") @db.Char(16)
-  Claims    String[] @default([])
+  Claims    Int[]    @default([])
   Status    String   @default("Under Review")
 }
 
 model Claims {
-  CID        Int    @id @default(autoincrement())
-  PID        String @db.Char(8)
-  CustomerID String @db.Char(16)
-  HEmpID     String @db.Char(16)
-  AdminID    String @db.Char(16)
-  Status     String @default("Under Review")
-  reqAmt     Float
+  CID    Int    @id @default(autoincrement())
+  PID    Int
+  UID    String @db.Char(16)
+  HEID   String @default("3234123412341234") @db.Char(16)
+  EID    String @default("1234123412341234") @db.Char(16)
+  Status String @default("Under Review")
+  CAmt   Float
 }
 
 // in other files, import prisma first then use its functions to manipulate the db
