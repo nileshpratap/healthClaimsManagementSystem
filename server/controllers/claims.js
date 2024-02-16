@@ -2,7 +2,7 @@
 import { prisma } from "../server.js";
 import { checkUserValidity } from "./policies.js";
 // create
-// by user or HEmp
+// by user
 export const createClaim = async (req, res) => {
   try {
     // create a claim in postgresql
@@ -67,8 +67,6 @@ export const createClaim = async (req, res) => {
           },
         },
       });
-
-      //
       return res.status(200).json({
         msg: "claim created by customer",
         "Type of user": userType,
