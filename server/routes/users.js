@@ -18,7 +18,7 @@ router.post("/register", registerAdmin_HEmp);
 
 // read routes
 // login
-router.get("/login", login);
+router.post("/login", login);
 
 // update
 // update customer profile data based on uid

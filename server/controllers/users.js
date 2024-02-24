@@ -87,7 +87,6 @@ export const registerCustomer = async (req, res) => {
           DOB: dob,
         },
       });
-
       const token = jwt.sign(newCustomer, process.env.ACCESS_TOKEN_SECRET);
 
       return res.status(200).json({
@@ -280,7 +279,6 @@ export const registerAdmin_HEmp = async (req, res, next) => {
 export const login = async (req, res) => {
   const userType = req.query.type;
   const { email, password } = req.body;
-
   const userTypeToTableName = {
     customer: "Customers",
     admin: "Admins",
