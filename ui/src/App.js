@@ -5,44 +5,27 @@ import UserRegister from "./pages/UserRegister";
 import UserLogin from "./pages/UserLogin";
 import AdminRegister from "./pages/AdminRegister";
 import AdminLogin from "./pages/AdminLogin";
+import AdminHome from "./pages/AdminHome";
+import UserHome from "./pages/UserHome";
+import { useEffect, useState } from "react";
 
 function App() {
-  let { userType } = useParams();
-  userType = userType || "neutral";
+  return (
+    <div className="app">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
 
-  if (userType == "user") {
-    return (
-      <div className="app">
-        <BrowserRouter>
-          <Routes>
-            <Route path="/register" element={<UserRegister />} />
-            <Route path="/login" element={<UserLogin />} />
-          </Routes>
-        </BrowserRouter>
-      </div>
-    );
-  } else if (userType == "admin") {
-    return (
-      <div className="app">
-        <BrowserRouter>
-          <Routes>
-            <Route path="/register" element={<AdminRegister />} />
-            <Route path="/login" element={<AdminLogin />} />
-          </Routes>
-        </BrowserRouter>
-      </div>
-    );
-  } else {
-    return (
-      <div className="app">
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-          </Routes>
-        </BrowserRouter>
-      </div>
-    );
-  }
+          <Route path="/user/register" element={<UserRegister />} />
+          <Route path="/user/login" element={<UserLogin />} />
+          <Route path="/user/home" element={<UserHome />} />
+
+          <Route path="/admin/register" element={<AdminRegister />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/home" element={<AdminHome />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 }
-
 export default App;

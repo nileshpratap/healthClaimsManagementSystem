@@ -89,13 +89,13 @@ const Navbar = () => {
           {isAuthDropdownOpen && (
             <div className="absolute right-0 mt-2 bg-gray-700 p-2 rounded shadow">
               <button
-                onClick={() => navigate("/login?userType=user")}
+                onClick={() => navigate("/user/login")}
                 className="block text-white hover:bg-gray-600 py-1 px-2"
               >
                 User
               </button>
               <button
-                onClick={() => navigate("/login?userType=admin")}
+                onClick={() => navigate("/admin/login")}
                 className="block text-white hover:bg-gray-600 py-1 px-2"
               >
                 Admin
@@ -141,13 +141,13 @@ const Navbar = () => {
           {isAuthDropdownOpen && (
             <div className="absolute right-0 mt-2 bg-gray-700 p-2 rounded shadow">
               <button
-                onClick={() => navigate("/login?userType=user")}
+                onClick={() => navigate("/user/login")}
                 className="block text-white hover:bg-gray-600 py-1 px-2"
               >
                 User
               </button>
               <button
-                onClick={() => navigate("/login?userType=admin")}
+                onClick={() => navigate("/admin/login")}
                 className="block text-white hover:bg-gray-600 py-1 px-2"
               >
                 Admin

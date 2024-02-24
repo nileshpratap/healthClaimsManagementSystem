@@ -13,6 +13,11 @@ const userstore = (set) => ({
   },
   Policies: [],
   claims: [],
+  setUser: (user) => {
+    set((state) => ({
+      userDetails: { ...state.userDetails, ...user },
+    }));
+  },
 });
 const adminstore = (set) => ({
   userDetails: {
@@ -25,14 +30,14 @@ const adminstore = (set) => ({
   Policies: [],
   claims: [],
 });
-export const useCourseStore = create(
+export const useUserStore = create(
   devtools(
     persist(userstore, {
       name: "user",
     })
   )
 );
-export const useadminstore = create(
+export const useAdminstore = create(
   devtools(
     persist(userstore, {
       name: "admin",
