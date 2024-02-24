@@ -1,11 +1,7 @@
 import "./App.css";
-import { useStore } from "./store";
-import { shallow } from "zustand/shallow";
 
 function App() {
-  const user = useStore((store) => store.user, shallow);
-  // using shallow minimize re-renders of react
-  return <div className="app">{user.name}</div>;
+  return <div className="app ml-5">Welcome to HCMS</div>;
 }
 
 export default App;
