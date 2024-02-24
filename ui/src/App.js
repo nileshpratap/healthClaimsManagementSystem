@@ -11,8 +11,8 @@ import { useEffect, useState } from "react";
 
 function App() {
   return (
-    <div className="app">
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="app">
         <Routes>
           <Route path="/" element={<LandingPage />} />
 
@@ -24,8 +24,8 @@ function App() {
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/home" element={<AdminHome />} />
         </Routes>
-      </BrowserRouter>
-    </div>
+      </div>
+    </BrowserRouter>
   );
 }
 export default App;

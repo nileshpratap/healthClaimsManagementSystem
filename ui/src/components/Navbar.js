@@ -51,21 +51,21 @@ const Navbar = () => {
               <NavLink
                 to="/products"
                 className="block text-white hover:bg-gray-600 py-1 px-2"
-                activeClassName="font-bold"
+                activeclassname="font-bold"
               >
                 Products
               </NavLink>
               <NavLink
                 to="/about"
                 className="block text-white hover:bg-gray-600 py-1 px-2"
-                activeClassName="font-bold"
+                activeclassname="font-bold"
               >
                 About us
               </NavLink>
               <NavLink
                 to="/contact"
                 className="block text-white hover:bg-gray-600 py-1 px-2"
-                activeClassName="font-bold"
+                activeclassname="font-bold"
               >
                 Contact us
               </NavLink>
@@ -109,21 +109,21 @@ const Navbar = () => {
           <NavLink
             to="/products"
             className="text-white"
-            activeClassName="border-b-2 border-white"
+            activeclassname="border-b-2 border-white"
           >
             Products
           </NavLink>
           <NavLink
             to="/about"
             className="text-white"
-            activeClassName="border-b-2 border-white"
+            activeclassname="border-b-2 border-white"
           >
             About us
           </NavLink>
           <NavLink
             to="/contact"
             className="text-white"
-            activeClassName="border-b-2 border-white"
+            activeclassname="border-b-2 border-white"
           >
             Contact us
           </NavLink>

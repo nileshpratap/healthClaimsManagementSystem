@@ -3,6 +3,7 @@ import userRoutes from "./routes/users.js";
 import claimsRoutes from "./routes/claims.js";
 import policiesRoutes from "./routes/policies.js";
 import cors from "cors";
+import { authenticate } from "./middlewares/auth.js";
 // import connectDBs from "./dbConnections/dbconnects.js";
 import { PrismaClient } from "@prisma/client";
 
@@ -16,8 +17,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use("/users", userRoutes);
-app.use("/claims", claimsRoutes);
-app.use("/policies", policiesRoutes);
+app.use("/claims", authenticate, claimsRoutes);
+app.use("/policies", authenticate, policiesRoutes);
 
 app.get("/", (req, res) => res.send("Hey, this is a CMS response!"));
 // Define default route

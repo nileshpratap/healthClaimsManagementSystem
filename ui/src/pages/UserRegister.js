@@ -15,6 +15,7 @@ function UserRegister() {
   });
 
   const setUser = useUserStore((state) => state.setUser);
+  const setToken = useUserStore((state) => state.setToken);
 
   const server = process.env.REACT_APP_SERVER_URL;
 
@@ -37,10 +38,12 @@ function UserRegister() {
 
     const dobDate = new Date(formData.DOB);
     const eighteenYearsAgo = new Date();
+    const hundredYearsAgo = new Date();
     eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+    hundredYearsAgo.setFullYear(hundredYearsAgo.getFullYear() - 100);
 
-    if (dobDate >= eighteenYearsAgo) {
-      alert("Date of Birth must be at least 18 years ago.");
+    if (dobDate >= eighteenYearsAgo && dobDate <= hundredYearsAgo) {
+      alert("Date of Birth must be between 18 to 100.");
       return;
     }
 
@@ -81,6 +84,7 @@ function UserRegister() {
       );
       const userData = res.data["registered user"];
       setUser(userData);
+      setToken(res.data.token);
       console.log(userData);
     } catch (error) {
       console.log("User not found:", error.response.data);

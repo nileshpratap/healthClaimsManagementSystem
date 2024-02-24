@@ -10,6 +10,7 @@ function UserLogin() {
   const [password, setPassword] = useState("");
 
   const setUser = useUserStore((state) => state.setUser);
+  const setToken = useUserStore((state) => state.setToken);
 
   const server = process.env.REACT_APP_SERVER_URL;
 
@@ -29,7 +30,8 @@ function UserLogin() {
       });
       const userData = res.data["logged in user"];
       setUser(userData);
-      console.log(userData);
+      setToken(res.data.token);
+      // console.log(userData);
     } catch (error) {
       console.log("User not found:", error.response.data);
       alert(JSON.stringify(error.response.data));

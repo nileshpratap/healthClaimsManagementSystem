@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Copy from "../components/Copy";
+import { useUserStore } from "../store";
 
 function LandingPage() {
+  const clearUser = useUserStore((state) => state.clearUser);
+  useEffect(() => {
+    clearUser();
+  }, []);
+
   return (
     <div className="bg-blue-500 min-h-screen text-white">
       <Navbar />

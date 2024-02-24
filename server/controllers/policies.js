@@ -96,8 +96,7 @@ export const createPolicybyUser = async (req, res) => {
 export const getUserPolicies = async (req, res) => {
   try {
     const userType = req.query.type;
-    const { UID, Email } = req.body;
-
+    const { UID, Email } = req.user;
     if (userType === "customer") {
       //  get user's policies from postgresql and return as a response
 
