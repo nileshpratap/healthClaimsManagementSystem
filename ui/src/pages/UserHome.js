@@ -2,6 +2,7 @@ import React from "react";
 import SignedInNavbar from "../components/SignedInNavbar";
 import UserDetails from "../components/UserDetails";
 import UserPolicies from "../components/UserPolicies";
+import CreatePolicy from "../components/CreatePolicy";
 
 function UserHome() {
   return (
@@ -17,6 +18,7 @@ function UserHome() {
         {/* Right Container (3/4 width) */}
         <div className="p-4">
           {/* Your content for the right container */}
+          <CreatePolicy />
           <h1 className="text-blue-900 font-bold text-3xl p-3">Policies</h1>
           <UserPolicies />
         </div>

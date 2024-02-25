@@ -8,7 +8,8 @@ export const createClaim = async (req, res) => {
     // create a claim in postgresql
     const userType = req.query.type;
     if (userType === "customer") {
-      const { UID, Email, PID, CAmt } = req.body;
+      const { UID, Email } = req.user;
+      const { PID, CAmt } = req.body;
 
       const UserValidity = await checkUserValidity(
         "customers",

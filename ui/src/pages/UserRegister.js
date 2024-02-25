@@ -86,22 +86,25 @@ function UserRegister() {
       setUser(userData);
       setToken(res.data.token);
       console.log(userData);
+
+      // Reset form data after submission
+      setFormData({
+        UID: "",
+        Name: "",
+        Email: "",
+        Password: "",
+        HealthCondition: 1,
+        DOB: "",
+      });
+
+      if (res.status !== 200) {
+        alert(JSON.stringify(res.data.msg), res.status);
+      } else {
+        navigate("/user/home");
+      }
     } catch (error) {
-      console.log("User not found:", error.response.data);
-      alert(JSON.stringify(error.response.data));
+      console.log(error);
     }
-
-    // Reset form data after submission
-    setFormData({
-      UID: "",
-      Name: "",
-      Email: "",
-      Password: "",
-      HealthCondition: 1,
-      DOB: "",
-    });
-
-    navigate("/user/home");
   };
 
   const handleInputChange = (e) => {

@@ -1,34 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useUserStore } from "../store";
 import axios from "axios";
 import PolicyCard from "./PolicyCard";
+import isEqual from "lodash/isEqual";
 
 function UserPolicies() {
-  const [localpolicies, setlocalPolicies] = useState([]);
   const server = process.env.REACT_APP_SERVER_URL;
-  const token = useUserStore((state) => state.token);
   const setPolicies = useUserStore((state) => state.setPolicies);
+  let globalPolicies = useUserStore((state) => state.Policies);
   const getPolicies = async () => {
     try {
       const res = await axios.get(
         server + "/policies/showAllforUser?type=customer"
       );
       const Policies = res.data.policies;
-      setPolicies(Policies);
-      setlocalPolicies(Policies);
-      console.log(Policies);
+      if (!isEqual(globalPolicies, Policies)) {
+        setPolicies(Policies);
+      }
     } catch (error) {
-      console.log("User not found:", error.response.data);
-      alert(JSON.stringify(error.response.data));
+      console.log(error);
     }
   };
+
   useEffect(() => {
     getPolicies();
   }, []);
+  useEffect(() => {}, [globalPolicies]);
   return (
-    <div className="flex items-center justify-start flex-wrap">
-      {localpolicies.map((policy) => (
-        <PolicyCard policyData={policy} />
+    <div className="flex items-center justify-center flex-wrap">
+      {globalPolicies.map((policy, id) => (
+        <PolicyCard key={id} policyData={policy} />
       ))}
     </div>
   );

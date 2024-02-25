@@ -42,7 +42,8 @@ export const createPolicybyUser = async (req, res) => {
     if (userType === "customer") {
       // check if the customer is valid
 
-      const { UID, Email, StartDate, EndDate, PAmount } = req.body;
+      const { UID, Email } = req.user;
+      const { StartDate, EndDate, PAmount } = req.body;
 
       const UserValidity = await checkUserValidity(
         "customers",
@@ -78,7 +79,7 @@ export const createPolicybyUser = async (req, res) => {
       return res.status(200).json({
         msg: "created policy for the customer in the db",
         "Type of user": userType,
-        "updated user": updatedUser,
+        createdPolicy,
       });
     } else {
       return res.status(400).json({

@@ -40,7 +40,7 @@ const SimpleNavbar = () => {
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <div>
-          <Link to="/" className="text-white text-xl font-bold">
+          <Link to="/user/home" className="text-white text-xl font-bold">
             HCMS
           </Link>
         </div>

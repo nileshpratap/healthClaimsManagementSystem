@@ -32,16 +32,19 @@ function UserLogin() {
       setUser(userData);
       setToken(res.data.token);
       // console.log(userData);
+
+      setEmail("");
+      setPassword("");
+
+      if (res.status !== 200) {
+        alert(JSON.stringify(res.data.msg), res.status);
+      } else {
+        navigate("/user/home");
+      }
+      // console.log("Login clicked with email:", email, "and password:", password);
     } catch (error) {
-      console.log("User not found:", error.response.data);
-      alert(JSON.stringify(error.response.data));
+      console.log(error);
     }
-
-    setEmail("");
-    setPassword("");
-
-    navigate("/user/home");
-    // console.log("Login clicked with email:", email, "and password:", password);
   };
   return (
     <>

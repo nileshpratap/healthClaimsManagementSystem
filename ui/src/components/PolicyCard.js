@@ -1,14 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router";
 
 const PolicyCard = ({ policyData }) => {
-  const calculateDuration = (start, end) => {
-    // Logic to calculate the duration between start and end dates
-    // You can customize this based on your specific requirements
-    return "Custom Duration";
-  };
-
+  const navigate = useNavigate();
   return (
-    <div className="max-w-sm bg-white p-4 m-3 lg:p-8 rounded-md shadow-md transform hover:shadow-lg hover:scale-105 transition duration-300 ease-in-out">
+    <div
+      onClick={() => navigate("/user/policy/" + policyData.PID)}
+      className="w-1/2 lg:w-1/4 md:w-1/3 bg-white px-4 m-3 lg:p-8 rounded-md shadow-md transform hover:shadow-lg hover:scale-105 transition duration-300 ease-in-out"
+    >
       <div className="mb-2 lg:mb-4">
         <label
           htmlFor="PID"
@@ -27,7 +26,7 @@ const PolicyCard = ({ policyData }) => {
           Start Date:
         </label>
         <p className="text-gray-800 text-xs lg:text-sm">
-          {policyData.StartDate}
+          {policyData.StartDate.split("T")[0]}
         </p>
       </div>
 
@@ -38,7 +37,9 @@ const PolicyCard = ({ policyData }) => {
         >
           End Date:
         </label>
-        <p className="text-gray-800 text-xs lg:text-sm">{policyData.EndDate}</p>
+        <p className="text-gray-800 text-xs lg:text-sm">
+          {policyData.EndDate.split("T")[0]}
+        </p>
       </div>
 
       <div className="mb-2 lg:mb-4">
@@ -48,9 +49,7 @@ const PolicyCard = ({ policyData }) => {
         >
           Policy Amount:
         </label>
-        <p className="text-gray-800 text-xs lg:text-sm">
-          {policyData.PolicyAmount}
-        </p>
+        <p className="text-gray-800 text-xs lg:text-sm">{policyData.PAmount}</p>
       </div>
 
       <div className="mb-2 lg:mb-4">

@@ -13,7 +13,7 @@ const userstore = (set) => ({
     PIDs: [],
   },
   Policies: [],
-  claims: [],
+  Claims: [],
   setToken: (token) => {
     set((state) => ({
       token,
@@ -47,6 +47,24 @@ const userstore = (set) => ({
   setPolicies: (Policies) => {
     set((state) => ({ Policies }));
   },
+  addPolicy: (newPolicy) => {
+    set((state) => ({
+      Policies: [...state.Policies, newPolicy],
+      userDetails: {
+        ...state.userDetails,
+        PIDs: [...state.userDetails.PIDs, newPolicy.PID],
+      },
+    }));
+  },
+  addClaim: (newClaim, policy) => {
+    set((state) => ({
+      Claims: [...state.Claims, newClaim],
+      Policies: [
+        ...state.Policies,
+        { ...policy, Claims: [policy.Claims, newClaim.CID] },
+      ],
+    }));
+  },
 });
 const adminstore = (set) => ({
   userDetails: {
@@ -68,7 +86,7 @@ export const useUserStore = create(
 );
 export const useAdminstore = create(
   devtools(
-    persist(userstore, {
+    persist(adminstore, {
       name: "admin",
     })
   )
