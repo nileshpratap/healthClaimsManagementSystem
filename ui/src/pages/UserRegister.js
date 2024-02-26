@@ -89,7 +89,7 @@ function UserRegister() {
 
       // Reset form data after submission
       setFormData({
-        UID: "",
+        UID: null,
         Name: "",
         Email: "",
         Password: "",
@@ -111,7 +111,7 @@ function UserRegister() {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: name === "UID" ? +value : value,
     });
   };
 

@@ -7,13 +7,14 @@ import isEqual from "lodash/isEqual";
 function UserPolicies() {
   const server = process.env.REACT_APP_SERVER_URL;
   const setPolicies = useUserStore((state) => state.setPolicies);
-  let globalPolicies = useUserStore((state) => state.Policies);
+  const globalPolicies = useUserStore((state) => state.Policies);
   const getPolicies = async () => {
     try {
       const res = await axios.get(
         server + "/policies/showAllforUser?type=customer"
       );
       const Policies = res.data.policies;
+      console.log(Policies);
       if (!isEqual(globalPolicies, Policies)) {
         setPolicies(Policies);
       }
