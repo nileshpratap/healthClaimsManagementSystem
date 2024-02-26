@@ -65,7 +65,7 @@ function AdminPolicyCard({ pid }) {
   };
 
   return (
-    <div className="w-1/2 lg:w-1/3 md:w-1/3 bg-white px-4 m-3 lg:p-5 rounded-md shadow-md transform hover:shadow-lg hover:scale-105 transition duration-300 ease-in-out">
+    <div className="lg:w-1/2 w-2/3 md:mx-auto bg-white px-4 m-3 lg:p-5 rounded-md shadow-md transform hover:shadow-lg hover:scale-105 transition duration-300 ease-in-out">
       <h4 className="text-blue-900 font-bold text-xl p-3">Policy Details</h4>
       <div className="mb-2 lg:mb-4">
         <label

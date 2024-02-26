@@ -10,7 +10,7 @@ function AdminPolicy() {
   return (
     <div>
       <SignedInNavbar userType="admin" />
-      <div className="flex lg:flex-row md:flex-col flex-col">
+      <div className="mx-auto flex w-full lg:w-8/12 lg:flex-row md:flex-col flex-col">
         <UserDetailsforAdmin pid={+PID} />
         <AdminPolicyCard pid={+PID} />
       </div>

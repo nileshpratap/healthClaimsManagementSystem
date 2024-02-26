@@ -14,6 +14,15 @@ import {
 } from "../validations/validations.js";
 // controllers for customers
 
+export const getOneUserbyAdmin = async (req, res) => {
+  const UID = req.params.UID;
+
+  const founduser = await prisma.customers.findFirst({ where: { UID } });
+  return res.status(200).json({
+    msg: "found customer deteails",
+    user: founduser,
+  });
+};
 export const registerCustomer = async (req, res) => {
   const userType = req.query.type;
   const requser = req.body;
