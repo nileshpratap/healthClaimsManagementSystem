@@ -37,7 +37,7 @@ const CreateClaim = ({ policyData }) => {
   };
 
   const [formData, setFormData] = useState({
-    ClaimAmount: 1,
+    ClaimAmount: 0,
   });
 
   const handleChange = (event) => {
@@ -119,7 +119,7 @@ const CreateClaim = ({ policyData }) => {
                   setFormData({
                     startDate: new Date().toISOString().split("T")[0],
                     duration: 1,
-                    ClaimAmount: 1,
+                    ClaimAmount: 0,
                   });
                   toggleFormVisibility();
                 }}

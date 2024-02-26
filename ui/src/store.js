@@ -41,7 +41,7 @@ const userstore = (set) => ({
         PIDs: [],
       },
       Policies: [],
-      claims: [],
+      Claims: [],
     }));
   },
   setPolicies: (Policies) => {
@@ -84,6 +84,14 @@ const userstore = (set) => ({
       ],
     }));
   },
+  updateClaim: (updatedClaim) => {
+    set((state) => ({
+      Claims: [
+        ...state.Claims.filter((c) => c.CID !== updatedClaim.CID),
+        updatedClaim,
+      ],
+    }));
+  },
 });
 const adminstore = (set) => ({
   userDetails: {
@@ -94,7 +102,7 @@ const adminstore = (set) => ({
     Policies: [],
   },
   Policies: [],
-  claims: [],
+  Claims: [],
 });
 export const useUserStore = create(
   devtools(

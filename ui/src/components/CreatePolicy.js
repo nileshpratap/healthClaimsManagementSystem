@@ -38,14 +38,19 @@ const CreatePolicy = () => {
   const [formData, setFormData] = useState({
     startDate: new Date().toISOString().split("T")[0],
     duration: 1,
-    premiumAmount: 1,
+    premiumAmount: 0,
   });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: name === "duration" ? parseInt(value, 10) : value,
+      [name]:
+        name === "duration"
+          ? parseInt(value, 10)
+          : name === "premiumAmount"
+          ? +value
+          : value,
     }));
   };
   // extract store function addPolicy
@@ -164,7 +169,7 @@ const CreatePolicy = () => {
                   setFormData({
                     startDate: new Date().toISOString().split("T")[0],
                     duration: 1,
-                    premiumAmount: 1,
+                    premiumAmount: 0,
                   });
                   toggleFormVisibility();
                 }}

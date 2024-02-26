@@ -286,7 +286,8 @@ export const updateClaim = async (req, res) => {
   try {
     const userType = req.query.type;
     if (userType === "customer") {
-      const { CID, UID, Email, PID, CAmt } = req.body;
+      const { UID, Email } = req.user;
+      const { CID, PID, CAmt } = req.body;
       const UserValidity = await checkUserValidity(
         "customers",
         UID,
