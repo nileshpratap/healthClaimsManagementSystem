@@ -9,16 +9,16 @@ import UserClaims from "../components/UserClaims";
 function UserPolicy() {
   const { PID } = useParams();
   const Policies = useUserStore((state) => state.Policies);
-  const Policy = Policies.filter((p) => p.PID !== PID)[0];
+  const Policy = Policies.filter((p) => p.PID === +PID)[0];
   return (
     <div>
       <SignedInNavbar />
 
       <div className="flex lg:flex-row flex-col">
         <PolicyCard policyData={Policy} />
-        <div className="w-2/3 p-4">
+        <div className="lg:w-2/3 w-full p-4">
           <CreateClaim policyData={Policy} />
-          <UserClaims />
+          <UserClaims policyData={Policy} />
         </div>
       </div>
     </div>

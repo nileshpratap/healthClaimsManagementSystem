@@ -86,7 +86,7 @@ const CreateClaim = ({ policyData }) => {
   return (
     <div
       ref={createPolicyRef}
-      className="bg-blue-100 text-gray-800 p-4 rounded-md transition"
+      className="w-full bg-blue-100 text-gray-800 p-4 rounded-md transition"
     >
       <div className="cursor-pointer">
         {isFormVisible ? (

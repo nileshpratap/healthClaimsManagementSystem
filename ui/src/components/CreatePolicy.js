@@ -64,7 +64,7 @@ const CreatePolicy = () => {
       const res = await axios.post(server + "/policies/create?type=customer", {
         StartDate: startDateString,
         EndDate: endDateString,
-        PAmount: +formData.premiumAmount,
+        PAmount: +formData.premiumAmount * formData.duration,
       });
 
       if (res.status !== 200) {
@@ -86,7 +86,7 @@ const CreatePolicy = () => {
   return (
     <div
       ref={createPolicyRef}
-      className="bg-blue-100 text-gray-800 p-4 rounded-md transition"
+      className="w-4/5 lg:w-full mx-auto bg-blue-100 text-gray-800 p-4 rounded-md transition"
     >
       <div className="cursor-pointer">
         {isFormVisible ? (

@@ -171,7 +171,8 @@ export const showClaimsofPolicy = async (req, res) => {
   const userType = req.query.type;
   try {
     if (userType === "customer") {
-      const { UID, Email, PID } = req.body;
+      const { UID, Email } = req.user;
+      const PID = +req.query.PID;
 
       const UserValidity = await checkUserValidity(
         "customers",
@@ -246,6 +247,7 @@ export const showClaimsofPolicy = async (req, res) => {
       });
     }
   } catch (err) {
+    console.log(err);
     res.status(404).json({ message: err.message });
   }
 };
@@ -254,6 +256,7 @@ export const showClaimsofPolicy = async (req, res) => {
 export const showClaim = async (req, res) => {
   // use postgresql
   const userType = req.query.type;
+
   try {
     if (userType === "customer") {
       res.status(200).json({
@@ -463,7 +466,9 @@ export const cancelClaim = async (req, res) => {
     // change claim status to cancelled
     const userType = req.query.type;
     if (userType === "customer") {
-      const { CID, UID, Email, PID } = req.body;
+      const { UID, Email } = req.user;
+      const CID = +req.query.CID;
+      const PID = +req.query.PID;
       const UserValidity = await checkUserValidity(
         "customers",
         UID,

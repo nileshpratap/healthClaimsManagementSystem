@@ -60,8 +60,27 @@ const userstore = (set) => ({
     set((state) => ({
       Claims: [...state.Claims, newClaim],
       Policies: [
-        ...state.Policies,
-        { ...policy, Claims: [policy.Claims, newClaim.CID] },
+        ...state.Policies.filter((p) => p.PID !== policy.PID),
+        { ...policy, Claims: [...policy.Claims, newClaim.CID] },
+      ],
+    }));
+  },
+  setClaims: (Claims) => {
+    set((state) => ({ Claims }));
+  },
+  removeClaim: (deletedClaim, PID) => {
+    set((state) => ({
+      Claims: state.Claims.filter((claim) => claim.CID != deletedClaim.CID),
+      Policies: [
+        ...state.Policies.filter((p) => p.PID !== PID),
+        {
+          ...state.Policies.filter((p) => p.PID === PID)[0],
+          Claims: [
+            ...state.Policies.filter((p) => p.PID === PID)[0].Claims.filter(
+              (c) => c != deletedClaim.CID
+            ),
+          ],
+        },
       ],
     }));
   },
