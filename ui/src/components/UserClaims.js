@@ -35,12 +35,7 @@ function UserClaims({ policyData }) {
   return (
     <div className="flex lg:flex-col flex-row flex-wrap justify-evenly items-start">
       {localClaims.map((claim, id) => (
-        <Claim
-          key={id}
-          ClaimData={claim}
-          PBalance={policyData.PBalance}
-          PID={policyData.PID}
-        />
+        <Claim key={id} ClaimData={claim} policyData={policyData} />
       ))}
     </div>
   );

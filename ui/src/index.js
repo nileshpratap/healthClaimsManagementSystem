@@ -21,7 +21,9 @@ axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
+setTimeout(() => {
+  localStorage.clear();
+}, 1000 * 60 * 60);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>

@@ -7,7 +7,6 @@ const userstore = (set) => ({
     UID: "",
     Name: "",
     Email: "",
-    Password: "",
     HealthCondition: "",
     DOB: "",
     PIDs: [],
@@ -35,13 +34,12 @@ const userstore = (set) => ({
         UID: "",
         Name: "",
         Email: "",
-        Password: "",
         HealthCondition: "",
         DOB: "",
         PIDs: [],
       },
       Policies: [],
-      claims: [],
+      Claims: [],
     }));
   },
   setPolicies: (Policies) => {
@@ -84,18 +82,35 @@ const userstore = (set) => ({
       ],
     }));
   },
+  updateClaim: (updatedClaim) => {
+    set((state) => ({
+      Claims: [
+        ...state.Claims.filter((c) => c.CID !== updatedClaim.CID),
+        updatedClaim,
+      ],
+    }));
+  },
 });
 const adminstore = (set) => ({
-  userDetails: {
-    EID: "",
-    Name: "",
-    Email: "",
-    Password: "",
-    Policies: [],
-  },
+  token: "",
+  EID: "",
+  Name: "",
+  Email: "",
   Policies: [],
-  claims: [],
+  Claims: [],
+  setToken: (token) => {
+    set((state) => ({
+      token,
+    }));
+  },
+  setAdmin: (admin) => {
+    set((state) => ({
+      Name: admin.Name,
+      Email: admin.Email,
+    }));
+  },
 });
+
 export const useUserStore = create(
   devtools(
     persist(userstore, {
@@ -103,7 +118,7 @@ export const useUserStore = create(
     })
   )
 );
-export const useAdminstore = create(
+export const useAdminStore = create(
   devtools(
     persist(adminstore, {
       name: "admin",

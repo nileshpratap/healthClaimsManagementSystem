@@ -122,7 +122,6 @@ export const getUserPolicies = async (req, res) => {
               PID: parseInt(pid),
             },
           });
-          console.log(pDetails);
           return pDetails;
         })
       );
@@ -220,7 +219,6 @@ export const getPoliciesAdmin = async (req, res) => {
           EID: admin.EID,
         },
       });
-      console.log(adminPolicies);
 
       return res.status(200).json({
         msg: "Policies related to admin",
@@ -330,7 +328,6 @@ export const deletePolicybyAdmin = async (req, res) => {
           "Type of user": userType,
         });
       }
-      // console.log(policyDetails);
       const olduser = await prisma.customers.findFirst({
         where: { UID: policyDetails.UID },
       });

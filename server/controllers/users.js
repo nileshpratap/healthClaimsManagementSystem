@@ -87,6 +87,7 @@ export const registerCustomer = async (req, res) => {
           DOB: dob,
         },
       });
+      delete newCustomer.Password;
       const token = jwt.sign(newCustomer, process.env.ACCESS_TOKEN_SECRET);
 
       return res.status(200).json({
@@ -111,14 +112,14 @@ export const registerAdmin_HEmp = async (req, res, next) => {
     const userType = req.query.type;
     const requser = req.body;
     if (userType === "admin") {
-      const { uid, cname, email, password } = req.body;
-      if (!uid || !cname || !email || !password) {
+      const { EID, cname, email, password } = req.body;
+      if (!EID || !cname || !email || !password) {
         return res.status(400).json({ message: "All fields are required." });
       }
       //validating all fields
-      // uid
+      // EID
       // length should be 16 and only digits
-      const idresp = isid(res, uid);
+      const idresp = isid(res, EID);
       if (idresp !== true) return idresp;
 
       // cname
@@ -148,7 +149,7 @@ export const registerAdmin_HEmp = async (req, res, next) => {
           where: {
             OR: [
               {
-                EID: uid,
+                EID: EID,
               },
               {
                 Email: email,
@@ -158,19 +159,20 @@ export const registerAdmin_HEmp = async (req, res, next) => {
         });
         if (foundAdmin) {
           return res.status(409).json({
-            msg: "admin already exists, please login if this is your UID or Email",
+            msg: "admin already exists, please login if this is your EID or Email",
             "Type of user": userType,
           });
         }
 
         const newAdmin = await prisma.admins.create({
           data: {
-            EID: uid,
+            EID: EID,
             Name: cname,
             Email: email,
             Password: hash_password,
           },
         });
+        delete newAdmin.Password;
         const token = jwt.sign(newAdmin, process.env.ACCESS_TOKEN_SECRET);
         return res.status(200).json({
           msg: "registered the admin",
@@ -250,6 +252,7 @@ export const registerAdmin_HEmp = async (req, res, next) => {
             Password: hash_password,
           },
         });
+        delete newHEmp.Password;
         const token = jwt.sign(newHEmp, process.env.ACCESS_TOKEN_SECRET);
         return res.status(200).json({
           msg: "registered the Hospital Employee",
@@ -274,8 +277,6 @@ export const registerAdmin_HEmp = async (req, res, next) => {
     res.status(404).json({ message: err.message });
   }
 };
-
-// read
 export const login = async (req, res) => {
   const userType = req.query.type;
   const { email, password } = req.body;
