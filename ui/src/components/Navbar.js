@@ -105,7 +105,7 @@ const Navbar = () => {
         </div>
 
         {/* Links */}
-        <div className="hidden md:flex space-x-4">
+        <div className="hidden md:flex space-x-5">
           <NavLink
             to="/products"
             className="text-white"

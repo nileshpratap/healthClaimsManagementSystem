@@ -5,3 +5,10 @@ function AdminRegister() {
 }
 
 export default AdminRegister;
+
+/*
+EID
+Name
+Email
+Password
+*/

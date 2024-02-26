@@ -2,11 +2,20 @@ import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useAdminStore } from "../store";
+import { useNavigate } from "react-router-dom";
 
 function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const setAdmin = useAdminStore((state) => state.setAdmin);
+  const setToken = useAdminStore((state) => state.setToken);
+
   const server = process.env.REACT_APP_SERVER_URL;
+
+  const navigate = useNavigate();
+
   const handleLogin = async (e) => {
     e.preventDefault();
     if (password.length < 6) {
@@ -15,20 +24,27 @@ function AdminLogin() {
       return;
     }
     try {
-      const res = await axios.post(server + "/users/login?type=admin", {
+      const res = await axios.post(server + "/users/login?type=customer", {
         email,
         password,
       });
-      const adminData = res.data;
-      console.log(adminData);
-    } catch (error) {
-      console.log("User not found:", error.response.data);
-      alert(JSON.stringify(error.response.data));
-    }
+      const userData = res.data["logged in user"];
+      setAdmin(userData);
+      setToken(res.data.token);
+      // console.log(userData);
 
-    setEmail("");
-    setPassword("");
-    // console.log("Login clicked with email:", email, "and password:", password);
+      setEmail("");
+      setPassword("");
+
+      if (res.status !== 200) {
+        alert(JSON.stringify(res.data.msg), res.status);
+      } else {
+        navigate("/user/home");
+      }
+      // console.log("Login clicked with email:", email, "and password:", password);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -41,7 +57,7 @@ function AdminLogin() {
       </nav>
       <div className="flex items-center justify-center h-screen bg-gray-100">
         <div className="bg-blue-200 p-8 rounded-md shadow-md w-full max-w-md">
-          <h1 className="text-2xl font-bold text-gray-800 mb-6">Admin Login</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mb-6">User Login</h1>
           <form onSubmit={handleLogin}>
             <div className="mb-4">
               <label

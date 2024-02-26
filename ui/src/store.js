@@ -7,7 +7,6 @@ const userstore = (set) => ({
     UID: "",
     Name: "",
     Email: "",
-    Password: "",
     HealthCondition: "",
     DOB: "",
     PIDs: [],
@@ -35,7 +34,6 @@ const userstore = (set) => ({
         UID: "",
         Name: "",
         Email: "",
-        Password: "",
         HealthCondition: "",
         DOB: "",
         PIDs: [],
@@ -94,16 +92,25 @@ const userstore = (set) => ({
   },
 });
 const adminstore = (set) => ({
-  userDetails: {
-    EID: "",
-    Name: "",
-    Email: "",
-    Password: "",
-    Policies: [],
-  },
+  token: "",
+  EID: "",
+  Name: "",
+  Email: "",
   Policies: [],
   Claims: [],
+  setToken: (token) => {
+    set((state) => ({
+      token,
+    }));
+  },
+  setAdmin: (admin) => {
+    set((state) => ({
+      Name: admin.Name,
+      Email: admin.Email,
+    }));
+  },
 });
+
 export const useUserStore = create(
   devtools(
     persist(userstore, {
@@ -111,7 +118,7 @@ export const useUserStore = create(
     })
   )
 );
-export const useAdminstore = create(
+export const useAdminStore = create(
   devtools(
     persist(adminstore, {
       name: "admin",

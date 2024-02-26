@@ -5,6 +5,7 @@ import UserPolicies from "../components/UserPolicies";
 import CreatePolicy from "../components/CreatePolicy";
 
 function UserHome() {
+  window.history.pushState({}, undefined, "/user/home");
   return (
     <>
       <SignedInNavbar />
