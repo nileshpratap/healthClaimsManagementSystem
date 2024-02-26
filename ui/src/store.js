@@ -27,7 +27,7 @@ const userstore = (set) => ({
       userDetails: { ...state.userDetails, ...user, DOBdate: formattedDate },
     }));
   },
-  clearUser: (user) => {
+  clearUser: () => {
     set((state) => ({
       token: "",
       userDetails: {
@@ -107,6 +107,18 @@ const adminstore = (set) => ({
     set((state) => ({
       Name: admin.Name,
       Email: admin.Email,
+      Policies: [...admin.Policies],
+      EID: admin.EID,
+    }));
+  },
+  clearAdmin: () => {
+    set((state) => ({
+      token: "",
+      EID: "",
+      Name: "",
+      Email: "",
+      Policies: [],
+      Claims: [],
     }));
   },
 });
