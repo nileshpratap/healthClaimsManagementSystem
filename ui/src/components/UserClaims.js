@@ -33,11 +33,16 @@ function UserClaims({ policyData }) {
     setLocalClaims(globalClaims.filter((c) => c.PID == policyData.PID));
   }, [globalClaims]);
   return (
-    <div className="flex lg:flex-col flex-row flex-wrap justify-evenly items-start">
-      {localClaims.map((claim, id) => (
-        <Claim key={id} ClaimData={claim} policyData={policyData} />
-      ))}
-    </div>
+    <>
+      <h5 className="text-blue-900 font-bold text-md p-3">
+        Total Claims: {globalClaims.length}
+      </h5>
+      <div className="flex lg:flex-col flex-row flex-wrap justify-evenly items-start">
+        {localClaims.map((claim, id) => (
+          <Claim ClaimData={claim} policyData={policyData} />
+        ))}
+      </div>
+    </>
   );
 }
 

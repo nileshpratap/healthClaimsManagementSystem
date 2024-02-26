@@ -8,6 +8,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminHome from "./pages/AdminHome";
 import UserHome from "./pages/UserHome";
 import UserPolicy from "./pages/UserPolicy";
+import AdminPolicy from "./pages/AdminPolicy";
 import NotFound from "./components/NotFound";
 import { isString } from "lodash";
 import { useEffect, useState } from "react";
@@ -36,6 +37,7 @@ function App() {
 
           <Route path="/admin/register" element={<AdminRegister />} />
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/policy/:PID" element={<AdminPolicy />} />
 
           {isString(adminToken) && adminToken !== "" && (
             <>

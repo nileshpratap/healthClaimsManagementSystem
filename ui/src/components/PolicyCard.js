@@ -1,11 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router";
 
-const PolicyCard = ({ policyData }) => {
+const PolicyCard = ({ policyData, userType }) => {
   const navigate = useNavigate();
+
   return (
     <div
-      onClick={() => navigate("/user/policy/" + policyData.PID)}
+      onClick={() =>
+        navigate(
+          userType === "user" ? "/user" : "/admin" + "/policy/" + policyData.PID
+        )
+      }
       className="w-1/2 lg:w-1/4 md:w-1/3 bg-white px-4 m-3 lg:p-8 rounded-md shadow-md transform hover:shadow-lg hover:scale-105 transition duration-300 ease-in-out"
     >
       <div className="mb-2 lg:mb-4">

@@ -56,7 +56,8 @@ function AdminRegister() {
         password: formData.Password,
       });
       const adminData = res.data["registered Admin"];
-      setAdmin(adminData);
+      let modAdminData = { ...adminData, Policies: [] };
+      setAdmin(modAdminData);
       setToken(res.data.token);
       console.log(adminData);
 

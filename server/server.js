@@ -37,24 +37,31 @@ const updateAllPolicies = async () => {
   // console.log("updating all policies");
   try {
     const allPolicies = await prisma.policies.findMany();
+    let PIDs = [];
 
     // Update logic here
     const updatedPolicies = await Promise.all(
       allPolicies.map(async (policy) => {
         // Your update logic for each policy
         // Example: Updating a specific column for each policy
+        PIDs.push(policy.PID);
         return prisma.policies.update({
           where: { PID: policy.PID },
           data: { EID: "1234123412341234", HEID: "3234123412341234" },
         });
       })
     );
+    const updatedAdmin = await prisma.admins.update({
+      where: { EID: "1234123412341234" },
+      data: { Policies: PIDs },
+    });
 
     // console.log("Updated policies:", updatedPolicies);
   } catch (error) {
     console.error("Error updating policies:", error);
   }
 };
+// updateAllPolicies();
 
 // Run the update function at 5-minute intervals
-// setInterval(updateAllPolicies, 2 * 60 * 1000); // 5 minutes in milliseconds
+setInterval(updateAllPolicies, 2 * 60 * 1000); // 2 minutes in milliseconds

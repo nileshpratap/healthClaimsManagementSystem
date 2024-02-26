@@ -121,6 +121,9 @@ const adminstore = (set) => ({
       Claims: [],
     }));
   },
+  setPolicies: (Policies) => {
+    set((state) => ({ Policies: [...Policies] }));
+  },
 });
 
 export const useUserStore = create(

@@ -8,11 +8,12 @@ function UserHome() {
   window.history.pushState({}, undefined, "/user/home");
   return (
     <>
-      <SignedInNavbar />
+      <SignedInNavbar userType="user" />
       <div className="flex lg:flex-row flex-col">
         {/* Left Container (1/4 width) */}
         <div className="lg:w-1/4 p-4">
           {/* Your content for the left container */}
+
           <UserDetails />
         </div>
 

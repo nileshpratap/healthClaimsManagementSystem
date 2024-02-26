@@ -12,10 +12,10 @@ function UserPolicy() {
   const Policy = Policies.filter((p) => p.PID === +PID)[0];
   return (
     <div>
-      <SignedInNavbar />
-
+      <SignedInNavbar userType="user" />
       <div className="flex lg:flex-row flex-col">
-        <PolicyCard policyData={Policy} />
+        <PolicyCard policyData={Policy} userType="user" />
+
         <div className="lg:w-2/3 w-full p-4">
           <CreateClaim policyData={Policy} />
           <UserClaims policyData={Policy} />

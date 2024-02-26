@@ -24,7 +24,7 @@ const UserProfileCard = () => {
 
   return (
     <div className="max-w-md mx-auto bg-white p-4 lg:p-8 rounded-md shadow-md transform hover:shadow-lg hover:scale-105 transition duration-300 ease-in-out">
-      <h1 className="text-blue-900 font-bold text-3xl p-3">Profile</h1>
+      <h3 className="text-blue-900 font-bold text-xl p-3">User Profile</h3>
 
       <div className="mb-2 lg:mb-4">
         <label

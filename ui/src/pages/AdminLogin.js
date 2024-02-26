@@ -6,8 +6,8 @@ import { useAdminStore } from "../store";
 import { useNavigate } from "react-router-dom";
 
 function AdminLogin() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("abc@gmail.com");
+  const [password, setPassword] = useState("nvp659");
 
   const setAdmin = useAdminStore((state) => state.setAdmin);
   const setToken = useAdminStore((state) => state.setToken);
@@ -36,7 +36,8 @@ function AdminLogin() {
         return;
       }
       const adminData = res.data["logged in admin"];
-      setAdmin(adminData);
+      let modAdminData = { ...adminData, Policies: [] };
+      setAdmin(modAdminData);
       setToken(res.data.token);
       // console.log(userData);
 

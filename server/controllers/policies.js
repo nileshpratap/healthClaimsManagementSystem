@@ -198,9 +198,10 @@ export const getUserPolicybyId = async (req, res) => {
 export const getPoliciesAdmin = async (req, res) => {
   try {
     const userType = req.query.type;
-    const { EID, Email } = req.body;
+    const { EID, Email } = req.user;
     if (userType === "admin") {
       //   get all policies that admin is involved in.
+      console.log("hi");
       const UserValidity = await checkUserValidity(
         "admins",
         EID,
@@ -216,7 +217,7 @@ export const getPoliciesAdmin = async (req, res) => {
       // scrape policie table to find all rows with EID = admin.EID.
       const adminPolicies = await prisma.policies.findMany({
         where: {
-          EID: admin.EID,
+          EID: EID,
         },
       });
 
