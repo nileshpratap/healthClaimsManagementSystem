@@ -11,11 +11,11 @@ function AdminPolicy() {
     <div>
       <SignedInNavbar userType="admin" />
       <div className="flex lg:flex-row md:flex-col flex-col">
-        <UserDetailsforAdmin PID={PID} />
-        <AdminPolicyCard PID={PID} />
+        <UserDetailsforAdmin pid={+PID} />
+        <AdminPolicyCard pid={+PID} />
       </div>
       <div className="w-2/3 p-4">
-        <AdminClaims PID={PID} />
+        <AdminClaims pid={+PID} />
       </div>
     </div>
   );

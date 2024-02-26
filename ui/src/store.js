@@ -124,6 +124,14 @@ const adminstore = (set) => ({
   setPolicies: (Policies) => {
     set((state) => ({ Policies: [...Policies] }));
   },
+  modifyPolicies: (updatedPolicy) => {
+    set((state) => ({
+      Policies: [
+        ...state.Policies.filter((p) => p.PID !== updatedPolicy.PID),
+        updatedPolicy,
+      ],
+    }));
+  },
 });
 
 export const useUserStore = create(
