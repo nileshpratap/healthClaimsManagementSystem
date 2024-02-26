@@ -52,6 +52,7 @@ export const registerCustomer = async (req, res) => {
     if (adultres !== true) return adultres;
 
     // checking if customer already exists
+
     try {
       const foundCustomer = await prisma.customers.findFirst({
         where: {
@@ -106,7 +107,7 @@ export const registerCustomer = async (req, res) => {
     });
   }
 };
-export const registerAdmin_HEmp = async (req, res, next) => {
+export const registerAdmin_HEmp = async (req, res) => {
   // use postgresql
   try {
     const userType = req.query.type;
@@ -329,7 +330,7 @@ export const login = async (req, res) => {
           return res.status(200).json({
             msg: `Logged in the ${userType}`,
             "Type of user": userType,
-            "logged in user": foundUser,
+            [`logged in ${userType}`]: foundUser,
             token,
           });
         } else {

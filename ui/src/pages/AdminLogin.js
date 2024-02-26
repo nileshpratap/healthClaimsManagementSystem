@@ -24,23 +24,27 @@ function AdminLogin() {
       return;
     }
     try {
-      const res = await axios.post(server + "/users/login?type=customer", {
+      const res = await axios.post(server + "/users/login?type=admin", {
         email,
         password,
       });
-      const userData = res.data["logged in user"];
-      setAdmin(userData);
+      console.log(res.status);
+      if (res.status !== 200) {
+        setEmail("");
+        setPassword("");
+        alert(JSON.stringify(res.data.msg), res.status);
+        return;
+      }
+      const adminData = res.data["logged in admin"];
+      setAdmin(adminData);
       setToken(res.data.token);
       // console.log(userData);
 
       setEmail("");
       setPassword("");
 
-      if (res.status !== 200) {
-        alert(JSON.stringify(res.data.msg), res.status);
-      } else {
-        navigate("/user/home");
-      }
+      navigate("/admin/home");
+
       // console.log("Login clicked with email:", email, "and password:", password);
     } catch (error) {
       console.log(error);
@@ -56,8 +60,8 @@ function AdminLogin() {
         </div>
       </nav>
       <div className="flex items-center justify-center h-screen bg-gray-100">
-        <div className="bg-blue-200 p-8 rounded-md shadow-md w-full max-w-md">
-          <h1 className="text-2xl font-bold text-gray-800 mb-6">User Login</h1>
+        <div className="bg-blue-100 p-8 rounded-md shadow-md w-full max-w-md">
+          <h1 className="text-2xl font-bold text-gray-800 mb-6">Admin Login</h1>
           <form onSubmit={handleLogin}>
             <div className="mb-4">
               <label
@@ -108,7 +112,7 @@ function AdminLogin() {
           <p className="text-gray-700 mt-4">
             Please{" "}
             <Link
-              to="/user/register"
+              to="/admin/register"
               className="text-black font-bold underline"
             >
               register
