@@ -20,7 +20,6 @@ function AdminRegister() {
 
   const handleRegistration = async (e) => {
     e.preventDefault();
-    console.log(formData);
 
     // Validate form fields here if needed
     // Validation logic
