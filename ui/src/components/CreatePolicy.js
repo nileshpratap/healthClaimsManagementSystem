@@ -81,6 +81,11 @@ const CreatePolicy = () => {
       const resPolicy = res.data.createdPolicy;
 
       addPolicy(resPolicy);
+      setFormData({
+        startDate: new Date().toISOString().split("T")[0],
+        duration: 1,
+        premiumAmount: 0,
+      });
 
       toggleFormVisibility(); // Assuming you have a function to toggle form visibility
     } catch (error) {
