@@ -15,7 +15,16 @@ const app = express();
 
 // middlewares
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://health-claims-management-system.vercel.app",
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204methods: 'GET, POST, PUT, DELETE',
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+// Enable preflight requests for all routes
+app.options("*", cors());
+
 app.use("/users", userRoutes);
 app.use("/claims", authenticate, claimsRoutes);
 app.use("/policies", authenticate, policiesRoutes);
