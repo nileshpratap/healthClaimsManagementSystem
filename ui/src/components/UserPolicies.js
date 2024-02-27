@@ -28,11 +28,16 @@ function UserPolicies() {
   }, []);
   useEffect(() => {}, [globalPolicies]);
   return (
-    <div className="flex items-center justify-center flex-wrap">
-      {globalPolicies.map((policy, id) => (
-        <PolicyCard key={id} policyData={policy} />
-      ))}
-    </div>
+    <>
+      <h5 className="text-blue-900 font-bold text-md p-3">
+        Total Policies: {globalPolicies.length}
+      </h5>
+      <div className="flex items-center justify-center flex-wrap">
+        {globalPolicies.map((policy, id) => (
+          <PolicyCard key={id} policyData={policy} userType="user" />
+        ))}
+      </div>
+    </>
   );
 }
 

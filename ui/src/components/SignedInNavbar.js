@@ -1,9 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useUserStore } from "../store";
+import { useUserStore, useAdminStore } from "../store";
 
-const SimpleNavbar = () => {
-  const user = useUserStore((state) => state.userDetails);
+const SignedInNavbar = ({ userType }) => {
+  let user;
+
+  const customer = useUserStore((state) => state);
+  const admin = useAdminStore((state) => state);
+
+  if (userType === "user") {
+    user = customer.userDetails;
+  } else if (userType === "admin") {
+    user = admin;
+  }
+
   const name = user.Name;
   const modified_name =
     name.charAt(0).toUpperCase() + name.split(" ")[0].substring(1);
@@ -13,6 +23,7 @@ const SimpleNavbar = () => {
   const nameDropdownRef = useRef(null);
 
   const clearUser = useUserStore((state) => state.clearUser);
+  const clearAdmin = useAdminStore((state) => state.clearAdmin);
 
   const toggleNameDropdown = () => {
     setNameDropdownOpen(!isNameDropdownOpen);
@@ -40,7 +51,10 @@ const SimpleNavbar = () => {
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <div>
-          <Link to="/user/home" className="text-white text-xl font-bold">
+          <Link
+            to={"/" + userType + "/home"}
+            className="text-white text-xl font-bold"
+          >
             HCMS
           </Link>
         </div>
@@ -63,7 +77,12 @@ const SimpleNavbar = () => {
               <button
                 onClick={() => {
                   // Perform logout action here
-                  clearUser();
+                  if (userType === "user") {
+                    clearUser();
+                  }
+                  if (userType === "admin") {
+                    clearAdmin();
+                  }
                   navigate("/");
                 }}
                 className="block text-white hover:bg-gray-600 py-1 px-2"
@@ -78,4 +97,4 @@ const SimpleNavbar = () => {
   );
 };
 
-export default SimpleNavbar;
+export default SignedInNavbar;

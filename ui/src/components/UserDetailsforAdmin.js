@@ -1,8 +1,29 @@
-import React from "react";
-import { useUserStore } from "../store";
+import React, { useEffect, useState } from "react";
+import { useAdminStore } from "../store";
+import axios from "axios";
 
-const UserProfileCard = () => {
-  const userData = useUserStore((state) => state.userDetails);
+function UserDetailsforAdmin({ pid }) {
+  const server = process.env.REACT_APP_SERVER_URL;
+  const globalPolicies = useAdminStore((state) => state.Policies);
+  const Policy = globalPolicies.filter((p) => p.PID === pid)[0];
+  const {
+    Claims,
+    UID,
+    PID,
+    EID,
+    StartDate,
+    EndDate,
+    PAmount,
+    PBalance,
+    Status,
+  } = Policy;
+  const [userData, setuserData] = useState({
+    UID: "",
+    Name: "",
+    Email: "",
+    HealthCondition: "",
+    DOB: "",
+  });
   const calculateAge = (dob) => {
     // Logic to calculate age based on DOB
     // Assuming dob is in the format 'YYYY-MM-DD'
@@ -21,9 +42,21 @@ const UserProfileCard = () => {
 
     return age;
   };
+  const getUser = async () => {
+    try {
+      const res = await axios.get(server + "/users/getonebyadmin/" + UID);
+
+      setuserData({ ...userData, ...res.data.user });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
-    <div className="max-w-md mx-auto bg-white p-4 lg:p-8 rounded-md shadow-md transform hover:shadow-lg hover:scale-105 transition duration-300 ease-in-out">
+    <div className="lg:w-1/2 w-2/3 md:mx-auto bg-white px-4 m-3 lg:p-5 rounded-md shadow-md transform hover:shadow-lg hover:scale-105 transition duration-300 ease-in-out">
       <h3 className="text-blue-900 font-bold text-xl p-3">User Profile</h3>
 
       <div className="mb-2 lg:mb-4">
@@ -83,7 +116,9 @@ const UserProfileCard = () => {
         >
           DOB:
         </label>
-        <p className="text-gray-800 text-xs lg:text-sm">{userData.DOBdate}</p>
+        <p className="text-gray-800 text-xs lg:text-sm">
+          {userData.DOB.split("T")[0]}
+        </p>
       </div>
 
       <div>
@@ -99,6 +134,6 @@ const UserProfileCard = () => {
       </div>
     </div>
   );
-};
+}
 
-export default UserProfileCard;
+export default UserDetailsforAdmin;

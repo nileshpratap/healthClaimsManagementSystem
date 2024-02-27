@@ -247,7 +247,7 @@ function UserRegister() {
               type="submit"
               className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none"
             >
-              User Registration
+              Register
             </button>
           </form>
           <p className="text-gray-700 mt-4">

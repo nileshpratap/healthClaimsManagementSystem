@@ -134,7 +134,7 @@ const Claim = ({ ClaimData, policyData }) => {
       <div className="flex items-center lg:justify-end space-x-4">
         <button
           style={{
-            display: ClaimData.Status === "Under Review" ? "inline" : "normal",
+            display: ClaimData.Status === "Under Review" ? "inline" : "none",
           }}
           onClick={() => {
             setToggleUpdateButton(true);
@@ -151,7 +151,7 @@ const Claim = ({ ClaimData, policyData }) => {
           onClick={(e) => handleDelete(e)}
           className="bg-red-500 text-white px-4 py-2 rounded-md transition-all"
         >
-          Delete
+          Cancel Request
         </button>
       </div>
     </div>

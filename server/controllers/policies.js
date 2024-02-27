@@ -198,7 +198,7 @@ export const getUserPolicybyId = async (req, res) => {
 export const getPoliciesAdmin = async (req, res) => {
   try {
     const userType = req.query.type;
-    const { EID, Email } = req.body;
+    const { EID, Email } = req.user;
     if (userType === "admin") {
       //   get all policies that admin is involved in.
       const UserValidity = await checkUserValidity(
@@ -216,7 +216,7 @@ export const getPoliciesAdmin = async (req, res) => {
       // scrape policie table to find all rows with EID = admin.EID.
       const adminPolicies = await prisma.policies.findMany({
         where: {
-          EID: admin.EID,
+          EID: EID,
         },
       });
 
@@ -261,7 +261,9 @@ export const getPolicyAdmin = async (req, res) => {
 export const updatePolicybyAdmin = async (req, res) => {
   try {
     const userType = req.query.type;
-    const { EID, Email, PID, Status } = req.body;
+    const { PID, Status } = req.body;
+    const { EID, Email } = req.user;
+
     if (userType === "admin") {
       //   get all policies that admin is involved in.
       const UserValidity = await checkUserValidity(
@@ -275,12 +277,13 @@ export const updatePolicybyAdmin = async (req, res) => {
         return UserValidity;
       }
       const admin = UserValidity.user;
-
+      console.log(admin);
+      const statusTowrite = Status === "Decline" ? "Declined" : "Accepted";
       const updatedPolicy = await prisma.policies.update({
         where: { PID },
-        data: { Status },
+        data: { Status: statusTowrite },
       });
-
+      console.log(updatedPolicy);
       return res.status(200).json({
         msg: "Policies updated by admin",
         "Type of user": userType,
@@ -293,7 +296,7 @@ export const updatePolicybyAdmin = async (req, res) => {
       });
     }
   } catch (error) {
-    return res.status(404).json({ message: err.message });
+    return res.status(404).json({ message: error.message });
   }
 };
 

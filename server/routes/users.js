@@ -6,6 +6,7 @@ import {
   updateCustomerDetails,
   updateAdmin_HEmp_Details,
   updateCustomerDetailsbyAdmin,
+  getOneUserbyAdmin,
 } from "../controllers/users.js";
 import { authenticate } from "../middlewares/auth.js";
 
@@ -27,6 +28,9 @@ router.patch("/updateCustomer/", updateCustomerDetails);
 router.patch("/updateCustomerbyAdmin/:uid/:aid", updateCustomerDetailsbyAdmin);
 // update admin/HEmp profile data based on id
 router.patch("/update/:id", updateAdmin_HEmp_Details);
+
+//read
+router.get("/getonebyadmin/:UID", authenticate, getOneUserbyAdmin);
 
 export default router;
 

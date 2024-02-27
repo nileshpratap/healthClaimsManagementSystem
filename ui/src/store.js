@@ -27,7 +27,7 @@ const userstore = (set) => ({
       userDetails: { ...state.userDetails, ...user, DOBdate: formattedDate },
     }));
   },
-  clearUser: (user) => {
+  clearUser: () => {
     set((state) => ({
       token: "",
       userDetails: {
@@ -107,7 +107,56 @@ const adminstore = (set) => ({
     set((state) => ({
       Name: admin.Name,
       Email: admin.Email,
+      Policies: [...admin.Policies],
+      EID: admin.EID,
     }));
+  },
+  clearAdmin: () => {
+    set((state) => ({
+      token: "",
+      EID: "",
+      Name: "",
+      Email: "",
+      Policies: [],
+      Claims: [],
+    }));
+  },
+  setPolicies: (Policies) => {
+    set((state) => ({ Policies: [...Policies] }));
+  },
+  setClaims: (Claims) => {
+    set((state) => ({ Claims }));
+  },
+  modifyPolicies: (updatedPolicy) => {
+    set((state) => ({
+      Policies: [
+        ...state.Policies.filter((p) => p.PID !== updatedPolicy.PID),
+        updatedPolicy,
+      ],
+    }));
+  },
+  updateClaim: (updatedClaim, updatedPolicy = null) => {
+    const { CID } = updatedClaim;
+    const { PID } = updatedPolicy;
+    if (updatedPolicy === null) {
+      set((state) => ({
+        Claims: [
+          ...state.Claims.filter((c) => c.CID !== updatedClaim.CID),
+          updatedClaim,
+        ],
+      }));
+    } else {
+      set((state) => ({
+        Policies: [
+          ...state.Policies.filter((p) => p.PID !== updatedPolicy.PID),
+          updatedPolicy,
+        ],
+        Claims: [
+          ...state.Claims.filter((c) => c.CID !== updatedClaim.CID),
+          updatedClaim,
+        ],
+      }));
+    }
   },
 });
 

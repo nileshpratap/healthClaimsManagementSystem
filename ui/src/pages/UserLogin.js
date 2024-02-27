@@ -6,8 +6,8 @@ import { useUserStore } from "../store";
 import { useNavigate } from "react-router-dom";
 
 function UserLogin() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("nileshpratapwar@gmail.com");
+  const [password, setPassword] = useState("abc123");
 
   const setUser = useUserStore((state) => state.setUser);
   const setToken = useUserStore((state) => state.setToken);
@@ -28,19 +28,18 @@ function UserLogin() {
         email,
         password,
       });
-      const userData = res.data["logged in user"];
+      if (res.status !== 200) {
+        setEmail("");
+        setPassword("");
+        alert(JSON.stringify(res.data.msg), res.status);
+      }
+      const userData = res.data["logged in customer"];
       setUser(userData);
       setToken(res.data.token);
       // console.log(userData);
 
-      setEmail("");
-      setPassword("");
+      navigate("/user/home");
 
-      if (res.status !== 200) {
-        alert(JSON.stringify(res.data.msg), res.status);
-      } else {
-        navigate("/user/home");
-      }
       // console.log("Login clicked with email:", email, "and password:", password);
     } catch (error) {
       console.log(error);
@@ -56,7 +55,7 @@ function UserLogin() {
         </div>
       </nav>
       <div className="flex items-center justify-center h-screen bg-gray-100">
-        <div className="bg-blue-200 p-8 rounded-md shadow-md w-full max-w-md">
+        <div className="bg-blue-100 p-8 rounded-md shadow-md w-full max-w-md">
           <h1 className="text-2xl font-bold text-gray-800 mb-6">User Login</h1>
           <form onSubmit={handleLogin}>
             <div className="mb-4">
