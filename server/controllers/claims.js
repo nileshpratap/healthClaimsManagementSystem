@@ -207,7 +207,9 @@ export const showClaimsofPolicy = async (req, res) => {
         claims,
       });
     } else if (userType === "admin") {
-      const { EID, Email, PID } = req.body;
+      const { EID, Email } = req.user;
+      const PID = +req.query.PID;
+
       const UserValidity = await checkUserValidity(
         "admins",
         EID,
@@ -215,6 +217,7 @@ export const showClaimsofPolicy = async (req, res) => {
         res,
         userType
       );
+
       if (UserValidity.type !== true) {
         return UserValidity;
       }
@@ -358,7 +361,8 @@ export const updateClaim = async (req, res) => {
       // 1.req.status is approve
       // also change the policy balance
 
-      const { CID, EID, Email, PID, action } = req.body;
+      const { EID, Email } = req.user;
+      const { CID, PID, Status } = req.body;
       const UserValidity = await checkUserValidity(
         "admins",
         EID,
@@ -389,7 +393,7 @@ export const updateClaim = async (req, res) => {
       claim = claim[0];
       if (
         claim.Status === "Under Review" &&
-        (action === "approve" || action === "decline")
+        (Status === "Approve" || Status === "Decline")
       ) {
         // check if the policy balance is < CAmt
         const policy = await prisma.policies.findFirst({ where: { PID } });
@@ -400,11 +404,11 @@ export const updateClaim = async (req, res) => {
           });
         }
         // decline the claim
-        if (action === "decline") {
+        if (Status === "Decline") {
           const updatedClaim = await prisma.claims.update({
             where: { CID },
             data: {
-              Status: "declined",
+              Status: "Declined",
             },
           });
           return res.status(200).json({
@@ -430,13 +434,14 @@ export const updateClaim = async (req, res) => {
         const updatedClaim = await prisma.claims.update({
           where: { CID },
           data: {
-            Status: "approved",
+            Status: "Approved",
           },
         });
         return res.status(200).json({
           msg: "Claim updated by admin",
           "Type of user": userType,
           updatedClaim,
+          updatedPolicy,
         });
       } else {
         return res.status(400).json({

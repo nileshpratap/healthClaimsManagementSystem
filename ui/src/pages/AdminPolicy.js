@@ -14,7 +14,7 @@ function AdminPolicy() {
         <UserDetailsforAdmin pid={+PID} />
         <AdminPolicyCard pid={+PID} />
       </div>
-      <div className="w-2/3 p-4">
+      <div className="w-2/3 p-4 my-2 mx-auto">
         <AdminClaims pid={+PID} />
       </div>
     </div>

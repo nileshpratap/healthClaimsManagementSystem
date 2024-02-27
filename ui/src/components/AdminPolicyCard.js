@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from "react";
 
 function AdminPolicyCard({ pid }) {
   const server = process.env.REACT_APP_SERVER_URL;
-  const globalPolicies = useAdminStore((state) => state.Policies);
   const modifyPolicies = useAdminStore((state) => state.modifyPolicies);
+  const globalPolicies = useAdminStore((state) => state.Policies);
   const Policy = globalPolicies.filter((p) => p.PID === pid)[0];
   const { Claims, PID, EID, StartDate, EndDate, PAmount, PBalance, Status } =
     Policy;

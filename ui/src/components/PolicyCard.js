@@ -3,12 +3,16 @@ import { useNavigate } from "react-router";
 
 const PolicyCard = ({ policyData, userType }) => {
   const navigate = useNavigate();
+  const { Claims, PID, EID, StartDate, EndDate, PAmount, PBalance, Status } =
+    policyData;
 
   return (
     <div
       onClick={() =>
         navigate(
-          userType === "user" ? "/user" : "/admin" + "/policy/" + policyData.PID
+          userType === "user"
+            ? "/user" + "/policy/" + PID
+            : "/admin" + "/policy/" + PID
         )
       }
       className="w-1/2 lg:w-1/4 md:w-1/3 bg-white px-4 m-3 lg:p-8 rounded-md shadow-md transform hover:shadow-lg hover:scale-105 transition duration-300 ease-in-out"
@@ -20,7 +24,7 @@ const PolicyCard = ({ policyData, userType }) => {
         >
           Policy ID:
         </label>
-        <p className="text-gray-800 text-xs lg:text-sm">{policyData.PID}</p>
+        <p className="text-gray-800 text-xs lg:text-sm">{PID}</p>
       </div>
 
       <div className="mb-2 lg:mb-4">
@@ -31,7 +35,7 @@ const PolicyCard = ({ policyData, userType }) => {
           Start Date:
         </label>
         <p className="text-gray-800 text-xs lg:text-sm">
-          {policyData.StartDate.split("T")[0]}
+          {StartDate.split("T")[0]}
         </p>
       </div>
 
@@ -43,7 +47,7 @@ const PolicyCard = ({ policyData, userType }) => {
           End Date:
         </label>
         <p className="text-gray-800 text-xs lg:text-sm">
-          {policyData.EndDate.split("T")[0]}
+          {EndDate.split("T")[0]}
         </p>
       </div>
 
@@ -54,7 +58,7 @@ const PolicyCard = ({ policyData, userType }) => {
         >
           Policy Amount:
         </label>
-        <p className="text-gray-800 text-xs lg:text-sm">{policyData.PAmount}</p>
+        <p className="text-gray-800 text-xs lg:text-sm">{PAmount}</p>
       </div>
 
       <div className="mb-2 lg:mb-4">
@@ -64,9 +68,7 @@ const PolicyCard = ({ policyData, userType }) => {
         >
           Policy Balance:
         </label>
-        <p className="text-gray-800 text-xs lg:text-sm">
-          {policyData.PBalance}
-        </p>
+        <p className="text-gray-800 text-xs lg:text-sm">{PBalance}</p>
       </div>
 
       <div className="mb-2 lg:mb-4">
@@ -76,7 +78,7 @@ const PolicyCard = ({ policyData, userType }) => {
         >
           Status:
         </label>
-        <p className="text-gray-800 text-xs lg:text-sm">{policyData.Status}</p>
+        <p className="text-gray-800 text-xs lg:text-sm">{Status}</p>
       </div>
     </div>
   );

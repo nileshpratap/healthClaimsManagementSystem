@@ -45,7 +45,7 @@ function UserDetailsforAdmin({ pid }) {
   const getUser = async () => {
     try {
       const res = await axios.get(server + "/users/getonebyadmin/" + UID);
-      console.log(res.data.user);
+
       setuserData({ ...userData, ...res.data.user });
     } catch (error) {
       console.log(error);

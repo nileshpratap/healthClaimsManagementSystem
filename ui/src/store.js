@@ -124,6 +124,9 @@ const adminstore = (set) => ({
   setPolicies: (Policies) => {
     set((state) => ({ Policies: [...Policies] }));
   },
+  setClaims: (Claims) => {
+    set((state) => ({ Claims }));
+  },
   modifyPolicies: (updatedPolicy) => {
     set((state) => ({
       Policies: [
@@ -131,6 +134,29 @@ const adminstore = (set) => ({
         updatedPolicy,
       ],
     }));
+  },
+  updateClaim: (updatedClaim, updatedPolicy = null) => {
+    const { CID } = updatedClaim;
+    const { PID } = updatedPolicy;
+    if (updatedPolicy === null) {
+      set((state) => ({
+        Claims: [
+          ...state.Claims.filter((c) => c.CID !== updatedClaim.CID),
+          updatedClaim,
+        ],
+      }));
+    } else {
+      set((state) => ({
+        Policies: [
+          ...state.Policies.filter((p) => p.PID !== updatedPolicy.PID),
+          updatedPolicy,
+        ],
+        Claims: [
+          ...state.Claims.filter((c) => c.CID !== updatedClaim.CID),
+          updatedClaim,
+        ],
+      }));
+    }
   },
 });
 

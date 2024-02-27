@@ -34,7 +34,7 @@ function UserPolicies() {
       </h5>
       <div className="flex items-center justify-center flex-wrap">
         {globalPolicies.map((policy, id) => (
-          <PolicyCard policyData={policy} userType="user" />
+          <PolicyCard key={id} policyData={policy} userType="user" />
         ))}
       </div>
     </>
