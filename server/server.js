@@ -17,7 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://health-claims-management-system.vercel.app",
+    origin: "*",
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204methods: 'GET, POST, PUT, DELETE',
     allowedHeaders: ["Content-Type", "Authorization"],
   })

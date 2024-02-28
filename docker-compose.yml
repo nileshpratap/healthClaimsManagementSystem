@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    ports:
+      - 5500:5500
+    environment:
+      - POSTGRES_PASSWORD=nvp65903
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=HCMSDB
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: nodeapp
+    container_name: hcms-node-server
+    command: npm start
+
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+    env_file: ./server/.env
+    environment:
+      - NODE_ENV=development
+    networks:
+      - app-network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    image: reactapp
+    container_name: hcms-react-client
+    command: npm start
+    depends_on:
+      - server
+    ports:
+      - "3000:3000"
+    env_file: ./ui/.env
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  data-volume:
+  node_modules:
+  web-root:
+    driver: local

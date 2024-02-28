@@ -1,6 +1,5 @@
 // import { client } from "../dbConnections/dbconnects.js";
 import { prisma } from "../server.js";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 // controllers for users
@@ -85,7 +84,7 @@ export const registerCustomer = async (req, res) => {
       // customer does not exist already, push the details into the DB
       // password hashing
       const saltRound = 3;
-      const hash_password = await bcrypt.hash(password, saltRound);
+      const hash_password = await password;
       // now pushing the details
       const newCustomer = await prisma.customers.create({
         data: {
@@ -151,7 +150,7 @@ export const registerAdmin_HEmp = async (req, res) => {
 
       // password hashing
       const saltRound = 3;
-      const hash_password = await bcrypt.hash(password, saltRound);
+      const hash_password = password;
 
       // validated the inputs, register the admin
       try {
@@ -252,7 +251,7 @@ export const registerAdmin_HEmp = async (req, res) => {
           });
         }
         const saltRound = 3;
-        const hash_password = await bcrypt.hash(password, saltRound);
+        const hash_password = password;
         const newHEmp = await prisma.hEmps.create({
           data: {
             HEID: uid,
@@ -334,21 +333,20 @@ export const login = async (req, res) => {
       });
     } else {
       const token = jwt.sign(foundUser, process.env.ACCESS_TOKEN_SECRET);
-      bcrypt.compare(password, foundUser.Password, function (err, result) {
-        if (result == true) {
-          return res.status(200).json({
-            msg: `Logged in the ${userType}`,
-            "Type of user": userType,
-            [`logged in ${userType}`]: foundUser,
-            token,
-          });
-        } else {
-          return res.status(401).json({
-            msg: "Incorrect Password, Try Again!",
-            "Type of user": userType,
-          });
-        }
-      });
+
+      if (password === foundUser.Password) {
+        return res.status(200).json({
+          msg: `Logged in the ${userType}`,
+          "Type of user": userType,
+          [`logged in ${userType}`]: foundUser,
+          token,
+        });
+      } else {
+        return res.status(401).json({
+          msg: "Incorrect Password, Try Again!",
+          "Type of user": userType,
+        });
+      }
     }
   } catch (error) {
     res.status(404).json({ message: err.message });

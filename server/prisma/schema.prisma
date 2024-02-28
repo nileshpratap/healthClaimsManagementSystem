@@ -6,13 +6,14 @@
 // so we are saying take all this prisma code and convert it using the prisma-client-js formatter which is default generator that we care about
 // most of the project use this generator
 generator client {
-  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+  provider      = "prisma-client-js"
 }
 
 // provider is where our data is coming from
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("REMOTE_DATABASE_URL")
 }
 
 model Customers {

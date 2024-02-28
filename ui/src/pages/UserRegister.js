@@ -85,7 +85,6 @@ function UserRegister() {
       const userData = res.data["registered user"];
       setUser(userData);
       setToken(res.data.token);
-      console.log(userData);
 
       // Reset form data after submission
       setFormData({
