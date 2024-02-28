@@ -1,39 +1,43 @@
 version: "3.8"
 
 services:
-  postgres:
-    image: postgres:14-alpine
-    ports:
-      - 5500:5500
-    environment:
-      - POSTGRES_PASSWORD=nvp65903
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=HCMSDB
   server:
     build:
       context: ./server
       dockerfile: Dockerfile
-    image: nodeapp
-    container_name: hcms-node-server
+    image: node-appv2
+    container_name: youthful_blackburn_v2
     command: npm start
-
-    ports:
-      - "5000:5000"
+    volumes:
+      - ./server/:/usr/src/app
+      - /usr/src/app/node_modules
     depends_on:
       - postgres
+    ports:
+      - "5000:5000"
     env_file: ./server/.env
     environment:
       - NODE_ENV=development
     networks:
       - app-network
-
+  postgres:
+    image: postgres
+    volumes:
+      - data-volume:/data/db
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
   client:
     build:
-      context: ./client
+      context: ./ui
       dockerfile: Dockerfile
-    image: reactapp
-    container_name: hcms-react-client
+    image: react-appv2
+    container_name: adoring_hoover_v2
     command: npm start
+    volumes:
+      - ./ui/:/usr/app
+      - /usr/app/node_modules
     depends_on:
       - server
     ports:

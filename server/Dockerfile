@@ -1,7 +1,7 @@
 # Dockerfile for React client
 
-# Build react client
-FROM node:debian-openssl-3.0.x
+# Build node client
+FROM node:20.11.0-bullseye
 
 # Set the working directory to D:\Docker
 WORKDIR /Docker
@@ -15,10 +15,9 @@ COPY package*.json .
 # Copy the rest of the application code into the container
 COPY . .
 
-RUN apt-get update -y && apt-get install -y openssl
-
 # Install dependencies
 RUN npm install
+RUN npx prisma generate
 
 # Command to run your application
 CMD ["npm", "start"]

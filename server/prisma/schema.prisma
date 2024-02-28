@@ -6,7 +6,7 @@
 // so we are saying take all this prisma code and convert it using the prisma-client-js formatter which is default generator that we care about
 // most of the project use this generator
 generator client {
-  binaryTargets = ["native", "debian-openssl-3.0.x"]
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
   provider      = "prisma-client-js"
 }
 
