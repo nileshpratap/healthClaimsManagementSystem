@@ -29,6 +29,7 @@ function UserRegister() {
     // Validation logic
     const nameRegex = /^[a-zA-Z\s]+$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const uidRegex = /^\d{16}$/;
 
     if (!nameRegex.test(formData.Name)) {
       alert("Please enter a valid name containing only alphabets.");
