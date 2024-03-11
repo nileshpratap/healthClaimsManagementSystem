@@ -28,8 +28,8 @@ function UserRegister() {
     // Validate form fields here if needed
     // Validation logic
     const nameRegex = /^[a-zA-Z\s]+$/;
-    const uidRegex = /^\d{16}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const uidRegex = /^\d{16}$/;
 
     if (!nameRegex.test(formData.Name)) {
       alert("Please enter a valid name containing only alphabets.");
@@ -47,7 +47,7 @@ function UserRegister() {
       return;
     }
 
-    if (!uidRegex.test(formData.UID)) {
+    if (!uidRegex.test(String(formData.UID))) {
       alert("UID must be a 16-digit number.");
       return;
     }
