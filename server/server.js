@@ -6,6 +6,8 @@ import cors from "cors";
 import { authenticate } from "./middlewares/auth.js";
 // import connectDBs from "./dbConnections/dbconnects.js";
 import { PrismaClient } from "@prisma/client";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUI from "swagger-ui-express";
 
 export const prisma = new PrismaClient();
 
@@ -22,6 +24,7 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+app.use(pino);
 // Enable preflight requests for all routes
 app.options("*", cors());
 
