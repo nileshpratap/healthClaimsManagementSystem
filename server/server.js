@@ -6,14 +6,22 @@ import cors from "cors";
 import { authenticate } from "./middlewares/auth.js";
 // import connectDBs from "./dbConnections/dbconnects.js";
 import { PrismaClient } from "@prisma/client";
-import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
+import swaggerDocument from "./swagger-output.json" assert { type: "json" };
 
 export const prisma = new PrismaClient();
 
 const app = express();
 // connect databases
 // connectDBs();
+
+app.use(cors());
+app.use(express.json());
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
+/* NOTE: If you are using the express Router, you must pass in the 'routes' only the 
+root file where the route starts, such as index.js, app.js, routes.js, etc ... */
 
 // middlewares
 app.use(express.json());
@@ -24,7 +32,7 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-app.use(pino);
+// app.use(pino);
 // Enable preflight requests for all routes
 app.options("*", cors());
 
