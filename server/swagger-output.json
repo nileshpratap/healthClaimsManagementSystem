@@ -5,10 +5,8 @@
     "description": "Description",
     "version": "1.0.0"
   },
-  "host": "localhost:5000",
-  "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/registerCustomer": {
@@ -562,16 +560,6 @@
           },
           "404": {
             "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/{create{where{PID}}": {
-      "delete": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
           }
         }
       }
