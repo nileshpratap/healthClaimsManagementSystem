@@ -9,6 +9,12 @@ import { PrismaClient } from "@prisma/client";
 import swaggerUI from "swagger-ui-express";
 import swaggerDocument from "./swagger-output.json" assert { type: "json" };
 
+// prometheus monitoring and exposing it on a route
+import promclient from "prom-client";
+
+const collectDefaultMetrics = promclient.collectDefaultMetrics;
+collectDefaultMetrics({ register: promclient.register });
+
 export const prisma = new PrismaClient();
 
 const app = express();
@@ -42,9 +48,6 @@ app.use("/policies", authenticate, policiesRoutes);
 
 app.get("/", (req, res) => res.send("Hey, this is a CMS response!"));
 // Define default route
-app.get("*", (req, res) => {
-  res.status(404).send("Path not found");
-});
 
 const serverPort = process.env.SERVER_PORT || 6000;
 app.listen(serverPort, () => {
@@ -85,3 +88,14 @@ const updateAllPolicies = async () => {
 
 // Run the update function at 5-minute intervals
 setInterval(updateAllPolicies, 2 * 60 * 1000); // 2 minutes in milliseconds
+
+// prometheus route
+app.get("/metrics", async (req, res) => {
+  res.setHeader("Content-Type", promclient.register.contentType);
+  const metrics = await promclient.register.metrics();
+  res.send(metrics);
+});
+
+app.get("*", (req, res) => {
+  res.status(404).send("Path not found");
+});
