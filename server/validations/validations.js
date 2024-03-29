@@ -14,7 +14,7 @@ export const containsOnlyDigits = (str) => {
 
 // validating string that is alphabet only
 export const containsOnlyAlphabets = (str) => {
-  const alphabetRegex = /^[a-zA-Z]+$/;
+  const alphabetRegex = /^[a-zA-Z\s]+$/;
   return alphabetRegex.test(str);
 };
 

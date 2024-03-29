@@ -6,8 +6,8 @@ import { useAdminStore } from "../store";
 import { useNavigate } from "react-router-dom";
 
 function AdminLogin() {
-  const [email, setEmail] = useState("abc@gmail.com");
-  const [password, setPassword] = useState("nvp659");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const setAdmin = useAdminStore((state) => state.setAdmin);
   const setToken = useAdminStore((state) => state.setToken);

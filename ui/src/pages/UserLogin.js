@@ -6,8 +6,8 @@ import { useUserStore } from "../store";
 import { useNavigate } from "react-router-dom";
 
 function UserLogin() {
-  const [email, setEmail] = useState("nileshpratapwar@gmail.com");
-  const [password, setPassword] = useState("abc123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const setUser = useUserStore((state) => state.setUser);
   const setToken = useUserStore((state) => state.setToken);
