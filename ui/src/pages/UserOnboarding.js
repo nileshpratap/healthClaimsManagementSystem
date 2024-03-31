@@ -3,14 +3,11 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useUserStore } from "../store";
 import { useNavigate } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
-function UserRegister() {
+function UserOnboarding() {
   const [formData, setFormData] = useState({
     UID: "",
-    Name: "",
-    Email: "",
-    Password: "",
     HealthCondition: 1, // Default value
     DOB: "",
   });
@@ -24,18 +21,10 @@ function UserRegister() {
 
   const handleRegistration = async (e) => {
     e.preventDefault();
-    console.log(formData);
 
     // Validate form fields here if needed
     // Validation logic
-    const nameRegex = /^[a-zA-Z\s]+$/;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const uidRegex = /^\d{16}$/;
-
-    if (!nameRegex.test(formData.Name)) {
-      alert("Please enter a valid name containing only alphabets.");
-      return;
-    }
 
     const dobDate = new Date(formData.DOB);
     const eighteenYearsAgo = new Date();
@@ -53,16 +42,6 @@ function UserRegister() {
       return;
     }
 
-    if (!emailRegex.test(formData.Email)) {
-      alert("Please enter a valid email address.");
-      return;
-    }
-
-    if (formData.Password.length < 6) {
-      alert("Password must be at least 6 characters.");
-      return;
-    }
-
     if (formData.HealthCondition < 1 || formData.HealthCondition > 10) {
       alert("Health Condition must be a number between 1 and 10.");
       return;
@@ -71,15 +50,29 @@ function UserRegister() {
     // date string modification
     const dateString = new Date(formData.DOB).toISOString();
 
+    const info = jwtDecode(
+      JSON.parse(localStorage.getItem("gtoken")).credential
+    );
+    const cname = info.name;
+    const email = info.email;
+
+    console.log(
+      formData.UID.toString(),
+      cname,
+      email,
+      +formData.HealthCondition,
+      "password",
+      dateString
+    );
     try {
       const res = await axios.post(
         server + "/users/registerCustomer?type=customer",
         {
           uid: formData.UID.toString(),
-          cname: formData.Name,
-          email: formData.Email,
+          cname,
+          email,
           healthCondition: +formData.HealthCondition,
-          password: formData.Password,
+          password: "password",
           dob: dateString,
         }
       );
@@ -106,11 +99,6 @@ function UserRegister() {
       console.log(error);
     }
   };
-  const handleGoogleRegister = async (res) => {
-    // let info = jwtDecode(res.credential);
-    localStorage.setItem("gtoken", JSON.stringify(res));
-    navigate("/user/onboarding");
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -119,7 +107,6 @@ function UserRegister() {
       [name]: name === "UID" ? +value : value,
     });
   };
-
   return (
     <>
       <nav>
@@ -132,7 +119,7 @@ function UserRegister() {
       <div className="flex flex-col md:flex-row justify-center bg-gray-100 gap-3">
         <div className="bg-blue-200 p-8 rounded-md shadow-md w-full max-w-md mt-4">
           <h1 className="text-2xl font-bold text-gray-800 mb-6">
-            User Registration
+            Few Details before you jump in..
           </h1>
           <form onSubmit={handleRegistration}>
             <div className="mb-4">
@@ -152,63 +139,6 @@ function UserRegister() {
                 placeholder="Enter UID"
                 required
               />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="Name"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                Name:
-              </label>
-              <input
-                type="text"
-                id="Name"
-                name="Name"
-                value={formData.Name}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="Enter Name"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="Email"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                Email:
-              </label>
-              <input
-                type="email"
-                id="Email"
-                name="Email"
-                value={formData.Email}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="Enter Email"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="Password"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                Password:
-              </label>
-              <input
-                type="password"
-                id="Password"
-                name="Password"
-                value={formData.Password}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                placeholder="Enter Password"
-                required
-              />
-              <span className="text-gray-800 text-sm mt-4">
-                Password length should be atleast 6 characters
-              </span>
             </div>
             <div className="mb-4">
               <label
@@ -262,33 +192,9 @@ function UserRegister() {
             </Link>
           </p>
         </div>
-        <div className="bg-blue-200 rounded-md h-fit p-6 shadow-md w-full max-w-md mt-10">
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 font-bold text-gray-800">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="py-2 font-bold text-gray-800">
-                <GoogleLogin
-                  onSuccess={handleGoogleRegister}
-                  onError={() => {
-                    console.log("Error in Admin Google Login");
-                  }}
-                />
-              </span>
-            </div>
-          </div>
-        </div>
       </div>
     </>
   );
 }
 
-export default UserRegister;
+export default UserOnboarding;

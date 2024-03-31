@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import axios from "axios";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 axios.interceptors.request.use(
   (config) => {
@@ -27,6 +28,8 @@ setTimeout(() => {
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <GoogleOAuthProvider clientId="623470898615-d36ch2l8j3hh2aq8n5iobkbukjr0gglb.apps.googleusercontent.com">
+      <App />
+    </GoogleOAuthProvider>
   </React.StrictMode>
 );

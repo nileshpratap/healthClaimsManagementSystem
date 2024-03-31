@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useAdminStore } from "../store";
 import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -51,6 +53,43 @@ function AdminLogin() {
       console.log(error);
     }
   };
+  const handleGoogleLogin = async (res) => {
+    let info = jwtDecode(res.credential);
+    let email = info.email;
+    let password = "password";
+    if (password.length < 6) {
+      alert("please enter password greater than length 6");
+      setPassword("");
+      return;
+    }
+    try {
+      const res = await axios.post(server + "/users/login?type=admin", {
+        email,
+        password,
+      });
+      console.log(res.status);
+      if (res.status !== 200) {
+        setEmail("");
+        setPassword("");
+        alert(JSON.stringify(res.data.msg), res.status);
+        return;
+      }
+      const adminData = res.data["logged in admin"];
+      let modAdminData = { ...adminData, Policies: [] };
+      setAdmin(modAdminData);
+      setToken(res.data.token);
+      // console.log(userData);
+
+      setEmail("");
+      setPassword("");
+
+      navigate("/admin/home");
+
+      // console.log("Login clicked with email:", email, "and password:", password);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <nav>
@@ -60,8 +99,8 @@ function AdminLogin() {
           </Link>
         </div>
       </nav>
-      <div className="flex items-center justify-center h-screen bg-gray-100">
-        <div className="bg-blue-100 p-8 rounded-md shadow-md w-full max-w-md">
+      <div className="flex flex-col md:flex-row items-center justify-center h-screen bg-gray-100 gap-3">
+        <div className="bg-blue-200 p-8 rounded-md shadow-md w-full max-w-md">
           <h1 className="text-2xl font-bold text-gray-800 mb-6">Admin Login</h1>
           <form onSubmit={handleLogin}>
             <div className="mb-4">
@@ -120,6 +159,30 @@ function AdminLogin() {
             </Link>{" "}
             if you are new here.
           </p>
+        </div>
+        <div className="bg-blue-200 rounded-md h-fit p-6 shadow-md w-full max-w-md mt-10">
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 font-bold text-gray-800">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="py-2 font-bold text-gray-800">
+                <GoogleLogin
+                  onSuccess={handleGoogleLogin}
+                  onError={() => {
+                    console.log("Error in Admin Google Login");
+                  }}
+                />
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </>
