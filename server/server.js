@@ -31,16 +31,16 @@ root file where the route starts, such as index.js, app.js, routes.js, etc ... *
 
 // middlewares
 app.use(express.json());
-app.use(
-  cors({
-    origin: "*",
-    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204methods: 'GET, POST, PUT, DELETE',
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+// app.use(
+//   cors({
+//     origin: "*",
+//     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204methods: 'GET, POST, PUT, DELETE',
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//   })
+// );
 // app.use(pino);
 // Enable preflight requests for all routes
-app.options("*", cors());
+// app.options("*", cors());
 
 app.use("/users", userRoutes);
 app.use("/claims", authenticate, claimsRoutes);
